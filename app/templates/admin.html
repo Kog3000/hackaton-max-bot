@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% set tab = 'profile' %}
+{% block content %}
+<main class="screen" data-back="/profile">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/profile" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>Админка</h1>
+  </div>
+  <p class="lead">Ведение окон записи и льготных дней. Уведомления уходят автоматически.</p>
+
+  <dl class="stats">
+    <div><dd>{{ stats.windows_open }}</dd><dt>Запись открыта</dt></div>
+    <div><dd>{{ stats.windows_soon }}</dd><dt>Скоро откроется</dt></div>
+  </dl>
+  {% if stats.rules_stale %}<p class="notice">Правил, которые не сверялись больше 90 дней: {{ stats.rules_stale }}.</p>{% endif %}
+
+  <section class="form-section">
+    <h2>Проверить уведомления</h2>
+    <p class="field__hint">Создаёт проверочные объекты и показывает весь путь уведомления. Оба потом удаляются как обычные записи.</p>
+    <div class="admin__bar" style="margin-top:12px">
+      <form method="post" action="/admin/probe/window"><button class="btn btn--primary" type="submit">Окно: запись через минуту</button></form>
+      <form method="post" action="/admin/probe/rule"><button class="btn btn--outline" type="submit">Льготный день на завтра</button></form>
+    </div>
+    <p class="field__hint">О льготном дне бот пишет с 10:00 до 21:00 по Москве.</p>
+  </section>
+
+  <section class="form-section">
+    <h2>Кто ведёт данные</h2>
+    <p class="field__hint">История правок видна всем, кто ведёт данные. Доступ выдаёт главный администратор.</p>
+    <div class="admin__bar" style="margin-top:12px">
+      <a class="btn btn--outline" href="/admin/log">Журнал правок</a>
+      {% if is_chief %}<a class="btn btn--outline" href="/admin/people">Редакторы</a>{% endif %}
+    </div>
+  </section>
+
+  <div class="tabs">
+    <a class="tab {{ 'tab--on' if section == 'windows' }}" href="/admin?section=windows">Окна записи</a>
+    <a class="tab {{ 'tab--on' if section == 'rules' }}" href="/admin?section=rules">Льготные дни</a>
+  </div>
+
+  <div class="admin__bar">
+    {% if section == 'windows' %}
+    <div class="chips">
+      <a class="chip {{ 'chip--on' if scope == 'active' }}" href="/admin?section=windows&scope=active">Предстоящие</a>
+      <a class="chip {{ 'chip--on' if scope == 'past' }}" href="/admin?section=windows&scope=past">Прошедшие</a>
+    </div>
+    <a class="btn btn--primary" href="/admin/window">Новое окно</a>
+    {% else %}
+    <a class="btn btn--primary" href="/admin/rule">Новый льготный день</a>
+    {% endif %}
+  </div>
+
+  {% if not items %}
+    <div class="state"><p class="state__title">Пока пусто</p><p class="state__text">Добавьте первую запись.</p></div>
+  {% elif section == 'windows' %}
+    <ul class="list">
+      {% for w in items %}
+      <li><a class="card" href="/admin/window/{{ w.id }}">
+        <span class="card__tile"></span>
+        <span class="card__body">
+          <span class="card__title">{{ w.title }}</span>
+          <span class="card__sub">{{ w.starts_at|dt }} · {{ [w.venue, w.district]|select|join(', ') }}</span>
+          <span class="admin-counters">
+            <span class="status status--{{ w.status }}">{{ {'soon':'Скоро','open':'Открыта','closed':'Закрыта','past':'Прошло'}[w.status] }}</span>
+            <span>Напоминаний: {{ w.reminders_count }}</span>
+            <span>Уведомлено: {{ w.notified_count }}</span>
+          </span>
+        </span>
+        <span class="card__chevron ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span>
+      </a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <ul class="list">
+      {% for r in items %}
+      <li><a class="card" href="/admin/rule/{{ r.id }}">
+        <span class="card__tile"></span>
+        <span class="card__body">
+          <span class="card__title">{{ r.venue }}</span>
+          <span class="card__sub">{{ rule_text(r.weekday, r.nth) }} · {{ r.title }}</span>
+          <span class="admin-counters">
+            {% if r.next_date %}<span>Ближайший: {{ r.next_date|day }}</span>{% endif %}
+            <span>Проверено {{ r.checked_at|checked }}</span>
+          </span>
+        </span>
+        <span class="card__chevron ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span>
+      </a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</main>
+{% endblock %}

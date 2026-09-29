@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set tab = 'profile' %}
+{% block content %}
+<main class="screen screen--flush">
+  <section class="profile__top">
+    <div class="profile__head">
+      <span class="profile__name">{{ user.first_name or 'Гость' }}</span>
+    </div>
+    <div class="profile__stats">
+      <div><b>{{ reminders|length }}</b><span>событий</span></div>
+      <div><b>{{ category_label(user.category) }}</b><span>льгота</span></div>
+      <div><b>{{ visited|length }}</b><span>прошедших</span></div>
+    </div>
+  </section>
+
+  <ul class="menu">
+    <li><a href="/profile/visited">
+      <span class="menu__icon ic" style="--ic:url(/static/icons/akar-icons_calendar.svg)"></span>
+      <span>Прошедшие события</span>
+      <span class="menu__hint ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span></a></li>
+    <li><a href="/profile/alerts">
+      <span class="menu__icon ic" style="--ic:url(/static/icons/famicons_notifications-outline.svg)"></span>
+      <span>Уведомления</span>
+      <span class="menu__hint ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span></a></li>
+    <li><a href="/onboarding?mode=change&from=/profile">
+      <span class="menu__icon ic" style="--ic:url(/static/icons/gg_notes.svg)"></span>
+      <span>Категория льготы</span>
+      <span class="menu__hint ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span></a></li>
+    <li><a href="/profile/help">
+      <span class="menu__icon ic" style="--ic:url(/static/icons/ci_circle-help.svg)"></span>
+      <span>Помощь</span>
+      <span class="menu__hint ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span></a></li>
+    <li><a href="/profile/about">
+      <span class="menu__icon ic" style="--ic:url(/static/icons/ci_info.svg)"></span>
+      <span>О приложении</span>
+      <span class="menu__hint ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span></a></li>
+    {% if is_admin %}
+    <li><a href="/admin">
+      <span class="menu__icon ic" style="--ic:url(/static/icons/ci_settings.svg)"></span>
+      <span>Админка</span>
+      <span class="menu__hint ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span></a></li>
+    {% endif %}
+  </ul>
+</main>
+{% endblock %}

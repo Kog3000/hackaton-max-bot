@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% block content %}
+<main class="screen" data-back="/admin">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/admin" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>Редакторы</h1>
+  </div>
+  <p class="lead">Редактор ведёт окна записи и льготные дни, но не может выдавать доступ другим.</p>
+
+  <form method="post" action="/admin/people">
+    <section class="form-section">
+      <div class="field"><label for="editor_id">ID в MAX</label>
+        <input id="editor_id" name="editor_id" inputmode="numeric" pattern="[0-9]*" required placeholder="123456789"></div>
+      <button class="btn btn--primary" type="submit" style="margin-bottom:10px">Выдать доступ</button>
+    </section>
+  </form>
+
+  {% if not editors %}
+    <div class="state"><p class="state__title">Редакторов нет</p><p class="state__text">Пока админку видят только главные администраторы из настроек сервера.</p></div>
+  {% else %}
+    <ul class="list">
+      {% for e in editors %}
+      <li><div class="row">
+        <span class="row__body">
+          <span class="row__title">{{ e.first_name or 'Без имени' }}</span>
+          <span class="row__sub">{{ e.id }}</span>
+        </span>
+        <form method="post" action="/admin/people/{{ e.id }}/delete">
+          <button class="btn btn--danger btn--sm" type="submit">Снять</button>
+        </form>
+      </div></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+</main>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% set tab = 'catalog' %}
+{% block content %}
+<main class="screen">
+  {% include "_topbar.html" %}
+  <h1 class="page-title">Каталог</h1>
+
+  <form class="searchbar" method="get" action="/catalog">
+    <label class="search">
+      <span class="ic" style="--ic:url(/static/icons/search.svg)"></span>
+      <span class="visually-hidden">Поиск по каталогу</span>
+      <input name="q" value="{{ query }}" placeholder="Поиск по категориям" inputmode="search">
+    </label>
+    {% for t in filter.topics %}<input type="hidden" name="topic" value="{{ t }}">{% endfor %}
+    {% for d in filter.districts %}<input type="hidden" name="district" value="{{ d }}">{% endfor %}
+    {% for k in filter.kinds %}<input type="hidden" name="kind" value="{{ k }}">{% endfor %}
+    {% for f in filter.formats %}<input type="hidden" name="format" value="{{ f }}">{% endfor %}
+    <a class="icon-btn" href="/filters?{{ query_string }}" aria-label="Фильтры"><span class="ic" style="--ic:url(/static/icons/mage_filter.svg)"></span></a>
+  </form>
+
+  {% set applied = filter.topics + filter.districts + filter.kinds + filter.formats %}
+  {% if applied %}
+  <div class="chips">
+    {% for k in filter.kinds %}<span class="chip chip--on">{{ 'Льготные дни' if k == 'benefit' else 'Запись на события' }}</span>{% endfor %}
+    {% for t in filter.topics %}<span class="chip chip--on">{{ t|topic }}</span>{% endfor %}
+    {% for f in filter.formats %}<span class="chip chip--on">{{ format_label(f) }}</span>{% endfor %}
+    {% for d in filter.districts %}<span class="chip chip--on">{{ d }}</span>{% endfor %}
+    <a class="chip" href="/catalog{% if query %}?q={{ query }}{% endif %}">Сбросить</a>
+  </div>
+  {% endif %}
+
+  {% if items %}
+    <div class="section-head"><h2>Найдено</h2><span class="muted">{{ items|length }}</span></div>
+    <ul class="list">{% for item in items %}<li>{% include "_card.html" %}</li>{% endfor %}</ul>
+    <form class="sticky-actions" method="post" action="/subscribe">
+      <input type="hidden" name="topics" value="{{ filter.topics|join(',') }}">
+      <input type="hidden" name="districts" value="{{ filter.districts|join(',') }}">
+      <input type="hidden" name="kinds" value="{{ filter.kinds|join(',') }}">
+      <input type="hidden" name="formats" value="{{ filter.formats|join(',') }}">
+      <button class="btn btn--secondary" type="submit">Уведомлять о таком</button>
+    </form>
+  {% else %}
+    <div class="state">
+      <p class="state__title">{{ 'Ничего не нашли' if query else 'По фильтрам ничего нет' }}</p>
+      <p class="state__text">Измените запрос или фильтры — либо подпишитесь, и я сообщу, когда появится подходящее.</p>
+      <a class="btn btn--secondary" href="/catalog">Сбросить всё</a>
+    </div>
+  {% endif %}
+</main>
+{% endblock %}

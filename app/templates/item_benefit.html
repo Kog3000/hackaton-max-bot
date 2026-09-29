@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% block content %}
+<main class="screen screen--flush detail" data-back="/home">
+  <div class="cover">
+    {% if item.cover_url %}<img src="{{ item.cover_url }}" alt="">{% endif %}
+    <div class="cover__bar">
+      <a class="cover__btn" href="/home" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+      <form method="post" action="/favorite/benefit/{{ item.id }}">
+        <input type="hidden" name="day" value="{{ item.date.isoformat() }}">
+        <input type="hidden" name="on" value="{{ '0' if item.reminded else '1' }}">
+        <input type="hidden" name="next_url" value="/item/{{ item.key }}">
+        <button class="cover__btn {{ 'cover__btn--on' if item.reminded }}" type="submit"
+                aria-label="{{ 'Убрать из избранного' if item.reminded else 'В избранное' }}">
+          <span class="ic" style="--ic:url(/static/icons/akar-icons_heart.svg)"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <div class="detail__top">
+      <span class="tag tag--free">Льготный день</span>
+    </div>
+    <h1>{{ item.venue }}</h1>
+
+    <div class="facts">
+      <p class="fact"><span class="ic ic--sm" style="--ic:url(/static/icons/boxicons_location.svg)"></span>{{ [item.title, item.address]|select|join(', ') }}</p>
+      <p class="fact"><span class="ic ic--sm" style="--ic:url(/static/icons/akar-icons_calendar.svg)"></span>{{ item.date|rel }}</p>
+    </div>
+
+    {% if item.conditions %}<p class="desc">{{ item.conditions }}</p>{% endif %}
+
+    {% if item.eligible_for_you == false %}
+    <div class="notice">
+      <p>Это не для вашей категории льготы. Можно поделиться с тем, кому подходит.</p>
+      {% if not user.category %}<a class="link-btn" href="/onboarding?mode=change">Указать категорию</a>{% endif %}
+    </div>
+    {% endif %}
+
+    {% if item.next_dates %}
+    <h2 class="block-title">Следующие даты</h2>
+    <ul class="ticks">
+      {% for d in item.next_dates %}<li><span class="ic ic--sm" style="--ic:url(/static/icons/charm_tick.svg)"></span>{{ d|day }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2 class="block-title">Что входит</h2>
+    <ul class="ticks">
+      <li><span class="ic ic--sm" style="--ic:url(/static/icons/charm_tick.svg)"></span>Бесплатный вход по льготе</li>
+      {% for d in item.documents %}<li><span class="ic ic--sm" style="--ic:url(/static/icons/charm_tick.svg)"></span>Взять с собой: {{ d }}</li>{% endfor %}
+    </ul>
+
+    <p class="source">
+      Источник: {% if item.source_url %}<a href="{{ item.source_url }}" target="_blank" rel="noopener">{{ item.source_name }}</a>{% else %}{{ item.source_name }}{% endif %}<br>
+      Дата проверки: {{ item.checked_at|checked }}<br>
+      Условия могут измениться — перед визитом сверьтесь с сайтом.
+    </p>
+
+    <div class="sticky-actions">
+      {% if item.venue_url %}<a class="btn btn--primary" href="{{ item.venue_url }}" target="_blank" rel="noopener">Перейти на сайт</a>{% endif %}
+      {% if not item.reminded %}
+      <form method="post" action="/favorite/benefit/{{ item.id }}">
+        <input type="hidden" name="day" value="{{ item.date.isoformat() }}">
+        <input type="hidden" name="on" value="1">
+        <input type="hidden" name="next_url" value="/item/{{ item.key }}">
+        <button class="btn {{ 'btn--secondary' if item.venue_url else 'btn--primary' }}" type="submit">В избранное</button>
+      </form>
+      {% endif %}
+      <button class="btn btn--secondary" type="button" data-share-link
+              data-share-text="{{ item.venue }}: {{ item.title|lower }}, {{ item.date|day }}. Проверь, подходит ли тебе льгота:"
+              data-share-link="https://max.ru/{{ bot_username }}?startapp={{ item.key }}">Поделиться событием</button>
+    </div>
+  </div>
+</main>
+{% endblock %}

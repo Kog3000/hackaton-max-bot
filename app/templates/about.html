@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% set tab = 'profile' %}
+{% block content %}
+<main class="screen" data-back="/profile">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/profile" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>О приложении</h1>
+  </div>
+  <p class="lead">Aperio показывает, куда в Москве можно сходить бесплатно по вашей льготе, и присылает уведомление в момент, когда открывается запись на бесплатные экскурсии, лекции и мастер-классы.</p>
+  <h2 class="block-title">Откуда данные</h2>
+  <p class="muted">Льготные дни музеев и окна записи — из открытых источников: сайтов музеев, mos.ru и городских проектов. У каждой записи указан источник и дата проверки.</p>
+</main>
+{% endblock %}

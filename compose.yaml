@@ -1,0 +1,83 @@
+# Запуск всех компонентов одной командой: docker compose up --build
+name: aperio
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: Dockerfile
+  # переменные берутся из .env рядом с файлом или из панели хостинга
+  environment:
+    DATABASE_URL: postgres://${POSTGRES_USER:-aperio}:${POSTGRES_PASSWORD:-aperio}@db:5432/${POSTGRES_DB:-aperio}
+    MAX_BOT_TOKEN: ${MAX_BOT_TOKEN:-}
+    MAX_BOT_USERNAME: ${MAX_BOT_USERNAME:-}
+    MAX_API_BASE: ${MAX_API_BASE:-}
+    ADMIN_USER_IDS: ${ADMIN_USER_IDS:-}
+    ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}
+    INIT_DATA_TTL_SEC: ${INIT_DATA_TTL_SEC:-3600}
+    SESSION_TTL_SEC: ${SESSION_TTL_SEC:-86400}
+    ADMIN_SESSION_TTL_SEC: ${ADMIN_SESSION_TTL_SEC:-7200}
+    DEMO_DELAY_SEC: ${DEMO_DELAY_SEC:-60}
+    WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
+    SEED_ON_START: ${SEED_ON_START:-true}
+    TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aperio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aperio}
+      POSTGRES_DB: ${POSTGRES_DB:-aperio}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  # Страницы мини-приложения: при старте создаёт схему и грузит начальные данные.
+  web:
+    <<: *app
+    command: ["uvicorn", "app.web:app", "--host", "0.0.0.0", "--port", "8080", "--loop", "asyncio", "--proxy-headers"]
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Чат-бот на maxo.
+  bot:
+    <<: *app
+    command: ["python", "-m", "app.bot"]
+    depends_on:
+      web:
+        condition: service_healthy
+
+  # Планировщик уведомлений.
+  worker:
+    <<: *app
+    command: ["python", "-m", "app.worker"]
+    depends_on:
+      web:
+        condition: service_healthy
+
+  # Необязательно: временный HTTPS-адрес для мини-приложения.
+  # docker compose --profile tunnel up --build
+  tunnel:
+    image: cloudflare/cloudflared:2025.1.0
+    command: ["tunnel", "--no-autoupdate", "--url", "http://web:8080"]
+    depends_on:
+      web:
+        condition: service_healthy
+    profiles: ["tunnel"]
+
+volumes:
+  pgdata:

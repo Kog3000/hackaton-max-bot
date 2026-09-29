@@ -1,0 +1,616 @@
+{
+  "_note": "Реальные данные по Москве, собраны 26.09.2026 по официальным страницам музеев и mos.ru. Сроки окон записи задаются относительно первого запуска: {\"hours\": N} — сдвиг от текущего момента, {\"days\": N, \"hour\": H} — день и час по Москве, {\"rule\": {\"weekday\": W, \"nth\": N, \"hour\": H}} — ближайшая дата по правилу.",
+  "venues": [
+    {
+      "name": "Третьяковская галерея",
+      "district": "ЦАО",
+      "address": "Лаврушинский пер., 10",
+      "url": "https://www.tretyakovgallery.ru/"
+    },
+    {
+      "name": "Государственный исторический музей",
+      "district": "ЦАО",
+      "address": "Красная пл., 1",
+      "url": "https://shm.ru/"
+    },
+    {
+      "name": "ГМИИ им. А. С. Пушкина",
+      "district": "ЦАО",
+      "address": "ул. Волхонка, 12",
+      "url": "https://pushkinmuseum.art/"
+    },
+    {
+      "name": "Музей Победы",
+      "district": "ЗАО",
+      "address": "пл. Победы, 3",
+      "url": "https://victorymuseum.ru/"
+    },
+    {
+      "name": "Музей Москвы",
+      "district": "ЦАО",
+      "address": "Зубовский бул., 2",
+      "url": "https://mosmuseum.ru/"
+    },
+    {
+      "name": "Московский музей современного искусства",
+      "district": "ЦАО",
+      "address": "ул. Петровка, 25",
+      "url": "https://mmoma.ru/"
+    },
+    {
+      "name": "Музей-заповедник «Царицыно»",
+      "district": "ЮАО",
+      "address": "ул. Дольская, 1",
+      "url": "https://tsaritsyno-museum.ru/"
+    },
+    {
+      "name": "Музей-заповедник «Коломенское»",
+      "district": "ЮАО",
+      "address": "пр-т Андропова, 39",
+      "url": "https://www.mgomz.ru/"
+    },
+    {
+      "name": "Музей космонавтики",
+      "district": "СВАО",
+      "address": "пр-т Мира, 111",
+      "url": "https://kosmo-museum.ru/"
+    },
+    {
+      "name": "Усадьба Кусково",
+      "district": "ВАО",
+      "address": "ул. Юности, 2",
+      "url": "https://kuskovo.ru/"
+    },
+    {
+      "name": "Государственный Дарвиновский музей",
+      "district": "ЮЗАО",
+      "address": "ул. Вавилова, 57",
+      "url": "https://www.darwinmuseum.ru/"
+    },
+    {
+      "name": "Музей обороны Москвы",
+      "district": "ЗАО",
+      "address": "Мичуринский пр-т, Олимпийская деревня, 3",
+      "url": "https://gmom.ru/"
+    },
+    {
+      "name": "Выставочные залы Москвы",
+      "district": "ЦАО",
+      "address": "25 галерей по округам",
+      "url": "https://vzmoscow.ru/"
+    },
+    {
+      "name": "Музей М. А. Булгакова",
+      "district": "ЦАО",
+      "address": "Б. Садовая ул., 10",
+      "url": "https://bulgakovmuseum.ru/"
+    },
+    {
+      "name": "Музей В. В. Маяковского",
+      "district": "ЦАО",
+      "address": "Студенецкий пер., 6",
+      "url": "https://mayakovsky.museum/"
+    },
+    {
+      "name": "Музей Банка России",
+      "district": "ЦАО",
+      "address": "ул. Неглинная, 12",
+      "url": "https://museum.cbr.ru/"
+    },
+    {
+      "name": "Открой#Моспром",
+      "district": "ЦАО",
+      "address": "Экскурсии на предприятия по всем округам",
+      "url": "https://otkroimosprom.ru/"
+    },
+    {
+      "name": "Лекторий ВДНХ",
+      "district": "СВАО",
+      "address": "пр-т Мира, 119, павильон «Рабочий и колхозница»",
+      "url": "https://vdnh.ru/lektorij/"
+    },
+    {
+      "name": "Проект «Москва. Традиции. Люди»",
+      "district": "ЦАО",
+      "address": "По одной экскурсии в каждом округе",
+      "url": "https://russpass.ru/moskva-tradicii-lyudi"
+    },
+    {
+      "name": "Узнай Москву",
+      "district": "ЦАО",
+      "address": "Пешеходные экскурсии по городу",
+      "url": "https://um.mos.ru/"
+    }
+  ],
+  "benefit_rules": [
+    {
+      "venue": "Музей Москвы",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 2,
+      "nth": 0,
+      "conditions": "Городская акция: бесплатный вход во вторник третьей календарной недели месяца на все 17 площадок. Нужен бесплатный электронный билет на bilet.mos.ru через Mos ID, до 4 билетов на аккаунт. Дети до 18 лет и студенты могут взять билет в кассе без регистрации.",
+      "documents": [
+        "QR-код электронного билета",
+        "Документ о льготе — льготным категориям"
+      ],
+      "source_name": "mos.ru, акция «Московская музейная неделя»",
+      "source_url": "https://www.mos.ru/news/item/167015073/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Московский музей современного искусства",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 2,
+      "nth": 0,
+      "conditions": "Вторник третьей календарной недели месяца, все 14 площадок. Бесплатные билеты музей выкладывает не ранее 1 числа месяца.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт ММОМА, новость об акции",
+      "source_url": "https://mmoma.ru/know/news/250109",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей-заповедник «Царицыно»",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 3,
+      "nth": 0,
+      "conditions": "Среда третьей календарной недели месяца. Бесплатный вход в Большой дворец и Хлебный дом по электронному билету.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт Царицына, график акции на 2026 год",
+      "source_url": "https://tsaritsyno-museum.ru/the_museum/press-center/news/moscow-museum-week-2026/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей В. В. Маяковского",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 3,
+      "nth": 0,
+      "conditions": "Среда третьей календарной недели месяца. День недели стоит сверить с сайтом музея перед визитом.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Ведомости.Город, календарь бесплатных дней",
+      "source_url": "https://www.vedomosti.ru/gorod/culturalcity/articles/kalendar-raspisanie",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей космонавтики",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 4,
+      "nth": 0,
+      "conditions": "Четверг третьей календарной недели месяца. Действует и в Доме-музее академика Королёва.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт Музея космонавтики, страница акции",
+      "source_url": "https://kosmo-museum.ru/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Усадьба Кусково",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 4,
+      "nth": 0,
+      "conditions": "Четверг третьей календарной недели месяца. Музей открывает запись не ранее чем за 8 дней до начала недели.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт усадьбы Кусково, раздел о музейной неделе",
+      "source_url": "https://kuskovo.ru/posetitelyam/museum_week/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Государственный Дарвиновский музей",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 5,
+      "nth": 0,
+      "conditions": "Пятница третьей календарной недели месяца. Музей публикует точный график на год.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт Дарвиновского музея, график на 2026 год",
+      "source_url": "https://www.darwinmuseum.ru/projects/event/moskovskaya-muzejnaya-nedelya",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей-заповедник «Коломенское»",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 5,
+      "nth": 0,
+      "conditions": "Пятница третьей календарной недели месяца. Акция действует на площадках МГОМЗ, включая усадьбу Измайлово.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт МГОМЗ, дни бесплатного посещения",
+      "source_url": "https://www.mgomz.ru/ru/pages/mgomz-dni-besplatnogo-posescheniya",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей обороны Москвы",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 6,
+      "nth": 0,
+      "conditions": "Суббота третьей календарной недели месяца. День недели стоит сверить с сайтом музея.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Ведомости.Город, календарь бесплатных дней",
+      "source_url": "https://www.vedomosti.ru/gorod/culturalcity/articles/kalendar-raspisanie",
+      "is_model_data": false
+    },
+    {
+      "venue": "Выставочные залы Москвы",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 0,
+      "nth": 0,
+      "conditions": "Воскресенье третьей календарной недели месяца, 25 городских галерей.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт объединения «Выставочные залы Москвы»",
+      "source_url": "https://vzmoscow.ru/moskovskayamuzeynayanedelya",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей М. А. Булгакова",
+      "title": "Московская музейная неделя",
+      "categories": [
+        "all"
+      ],
+      "weekday": 0,
+      "nth": 0,
+      "conditions": "Воскресенье третьей календарной недели месяца. День недели подтверждён отчётом музея за 2024 год, перед визитом стоит сверить с сайтом.",
+      "documents": [
+        "QR-код электронного билета"
+      ],
+      "source_name": "Сайт музея Булгакова, официальные документы",
+      "source_url": "https://bulgakovmuseum.ru/about/documents",
+      "is_model_data": false
+    },
+    {
+      "venue": "Третьяковская галерея",
+      "title": "Бесплатный день для студентов",
+      "categories": [
+        "student"
+      ],
+      "weekday": 0,
+      "nth": 1,
+      "conditions": "Первое воскресенье месяца. Студенты, аспиранты, ординаторы и ассистенты-стажёры российских вузов и колледжей, включая иностранных студентов российских вузов.",
+      "documents": [
+        "Студенческий билет, продлённый на текущий учебный год",
+        "Паспорт"
+      ],
+      "source_name": "Сайт Третьяковской галереи, бесплатное посещение",
+      "source_url": "https://www.tretyakovgallery.ru/for-visitors/free/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Третьяковская галерея",
+      "title": "Бесплатный день для детей 7–17 лет",
+      "categories": [
+        "schoolkid",
+        "large_family"
+      ],
+      "weekday": 0,
+      "nth": 3,
+      "conditions": "Третье воскресенье месяца, для детей от 7 до 17 лет включительно. Взрослым сопровождающим — по обычному билету.",
+      "documents": [
+        "Свидетельство о рождении или паспорт ребёнка"
+      ],
+      "source_name": "Сайт Третьяковской галереи, бесплатное посещение",
+      "source_url": "https://www.tretyakovgallery.ru/for-visitors/free/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Третьяковская галерея",
+      "title": "Бесплатный день для пенсионеров",
+      "categories": [
+        "pensioner"
+      ],
+      "weekday": 2,
+      "nth": -1,
+      "conditions": "Последний вторник месяца.",
+      "documents": [
+        "Пенсионное удостоверение или справка",
+        "Паспорт"
+      ],
+      "source_name": "Сайт Третьяковской галереи, бесплатное посещение",
+      "source_url": "https://www.tretyakovgallery.ru/for-visitors/free/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Государственный исторический музей",
+      "title": "Бесплатное посещение основной экспозиции",
+      "categories": [
+        "schoolkid",
+        "student"
+      ],
+      "weekday": 0,
+      "nth": -1,
+      "conditions": "Последнее воскресенье месяца: дети 7–17 лет любого гражданства, студенты колледжей и вузов России, солдаты и сержанты срочной службы. Только основные экспозиции, временные выставки не входят.",
+      "documents": [
+        "Паспорт или свидетельство о рождении",
+        "Студенческий билет либо цифровой ID в MAX",
+        "Военный билет — военнослужащим"
+      ],
+      "source_name": "Сайт Исторического музея, билеты и льготы",
+      "source_url": "https://shm.ru/visit/tickets/gim/",
+      "is_model_data": false
+    },
+    {
+      "venue": "Музей Победы",
+      "title": "Бесплатный день, включая экскурсии",
+      "categories": [
+        "schoolkid",
+        "student",
+        "disability",
+        "veteran"
+      ],
+      "weekday": 4,
+      "nth": -1,
+      "conditions": "Последний четверг месяца. Бесплатны и вход, и экскурсии, включая «Подвиг Народа» и «Битву за Москву». Для лиц до 18 лет, обучающихся по основным профессиональным программам, инвалидов I и II группы с одним сопровождающим, участников СВО и членов их семей. Билет оформляют только в кассе.",
+      "documents": [
+        "Документ о льготе либо цифровой ID в MAX или на Госуслугах"
+      ],
+      "source_name": "Сайт Музея Победы, цены и льготы",
+      "source_url": "https://victorymuseum.ru/for-visitors/prices/",
+      "is_model_data": false
+    },
+    {
+      "venue": "ГМИИ им. А. С. Пушкина",
+      "title": "Бесплатный четверг",
+      "categories": [
+        "schoolkid",
+        "student",
+        "pensioner"
+      ],
+      "weekday": 4,
+      "nth": 9,
+      "conditions": "Каждый четверг, только постоянная экспозиция: дети 7–17 лет, молодёжь 18–24 лет и посетители 60+ с российским гражданством, обучающиеся вузов и колледжей России, держатели Менделеевской карты. Не действует на комплексный билет и в нерабочие праздничные дни.",
+      "documents": [
+        "Паспорт РФ или цифровой ID",
+        "Студенческий билет — обучающимся"
+      ],
+      "source_name": "Сайт Пушкинского музея, билеты",
+      "source_url": "https://pushkinmuseum.art/visitors/tickets/",
+      "is_model_data": false
+    }
+  ],
+  "windows": [
+    {
+      "title": "Экскурсия в Музей Банка России",
+      "topic": "excursion",
+      "venue": "Музей Банка России",
+      "district": "ЦАО",
+      "reg_opens": {
+        "rule": {
+          "weekday": 2,
+          "nth": 2,
+          "hour": 10
+        }
+      },
+      "reg_closes": {
+        "rule": {
+          "weekday": 2,
+          "nth": 2,
+          "hour": 14
+        }
+      },
+      "starts": {
+        "days": 45,
+        "hour": 12
+      },
+      "eligibility": [
+        "all"
+      ],
+      "conditions": "Запись открывается каждый второй вторник месяца в 10:00 и закрывается в 14:00 того же дня — места разбирают за считаные минуты. Освободившиеся места появляются при отказах.",
+      "documents": [
+        "Паспорт"
+      ],
+      "register_url": "https://museum.cbr.ru/events/poseshchenie-muzeya-/",
+      "source_name": "Сайт Музея Банка России, посещение музея",
+      "source_url": "https://museum.cbr.ru/events/poseshchenie-muzeya-/",
+      "format": "offline"
+    },
+    {
+      "title": "Экскурсия на московское предприятие",
+      "topic": "excursion",
+      "venue": "Открой#Моспром",
+      "district": "ЦАО",
+      "reg_opens": {
+        "hours": -6
+      },
+      "reg_closes": {
+        "days": 2,
+        "hour": 23
+      },
+      "starts": {
+        "days": 5,
+        "hour": 11
+      },
+      "eligibility": [
+        "all"
+      ],
+      "conditions": "Городской проект бесплатных экскурсий на производства. Запись открывается не ранее чем за 5 дней до экскурсии, обычно в первой половине дня. Свободные места добавляются автоматически при отказах.",
+      "documents": [
+        "Паспорт",
+        "Закрытая обувь и одежда с длинным рукавом"
+      ],
+      "register_url": "https://otkroimosprom.ru/events/",
+      "source_name": "Проект «Открой#Моспром», правила участия",
+      "source_url": "https://otkroimosprom.ru/rules/",
+      "format": "offline"
+    },
+    {
+      "title": "Бесплатная экскурсия «Москва. Традиции. Люди»",
+      "topic": "excursion",
+      "venue": "Проект «Москва. Традиции. Люди»",
+      "district": "ЦАО",
+      "reg_opens": {
+        "days": 1,
+        "hour": 12
+      },
+      "reg_closes": {
+        "days": 4,
+        "hour": 20
+      },
+      "starts": {
+        "days": 6,
+        "hour": 12
+      },
+      "eligibility": [
+        "all"
+      ],
+      "conditions": "Проект Комитета по туризму Москвы: по одной бесплатной экскурсии в каждом округе. Форма записи появляется на странице события по графику проекта.",
+      "documents": [],
+      "register_url": "https://russpass.ru/moskva-tradicii-lyudi",
+      "source_name": "Russpass, проект «Москва. Традиции. Люди»",
+      "source_url": "https://russpass.ru/moskva-tradicii-lyudi",
+      "format": "offline"
+    },
+    {
+      "title": "Лекция «Москва. Традиции. Люди»",
+      "topic": "lecture",
+      "venue": "Проект «Москва. Традиции. Люди»",
+      "district": "ЦАО",
+      "reg_opens": {
+        "days": 2,
+        "hour": 10
+      },
+      "reg_closes": {
+        "days": 7,
+        "hour": 20
+      },
+      "starts": {
+        "days": 8,
+        "hour": 19
+      },
+      "eligibility": [
+        "all"
+      ],
+      "conditions": "Лекции проекта проходят в округах Москвы, вход по предварительной записи.",
+      "documents": [],
+      "register_url": "https://russpass.ru/moskva-tradicii-lyudi",
+      "source_name": "Russpass, проект «Москва. Традиции. Люди»",
+      "source_url": "https://russpass.ru/moskva-tradicii-lyudi",
+      "format": "offline"
+    },
+    {
+      "title": "Лекция в павильоне «Рабочий и колхозница»",
+      "topic": "lecture",
+      "venue": "Лекторий ВДНХ",
+      "district": "СВАО",
+      "reg_opens": {
+        "hours": -2
+      },
+      "reg_closes": {
+        "days": 3,
+        "hour": 18
+      },
+      "starts": {
+        "days": 4,
+        "hour": 19
+      },
+      "eligibility": [
+        "all"
+      ],
+      "conditions": "Лекторий ВДНХ: вход на все события свободный, по предварительной регистрации.",
+      "documents": [],
+      "register_url": "https://vdnh.ru/lektorij/",
+      "source_name": "Сайт ВДНХ, лекторий",
+      "source_url": "https://vdnh.ru/lektorij/",
+      "format": "offline"
+    },
+    {
+      "title": "Пешеходная экскурсия «Наследие вокруг нас»",
+      "topic": "excursion",
+      "venue": "Узнай Москву",
+      "district": "ЦАО",
+      "reg_opens": {
+        "days": 1,
+        "hour": 10
+      },
+      "reg_closes": {
+        "days": 3,
+        "hour": 22
+      },
+      "starts": {
+        "days": 5,
+        "hour": 13
+      },
+      "eligibility": [
+        "all"
+      ],
+      "conditions": "Городской проект «Узнай Москву». Только для граждан России, при себе паспорт. Не более одной экскурсии с доступом внутрь объекта в месяц, прогулочные — без лимита. Отказаться нужно не позднее чем за два рабочих дня.",
+      "documents": [
+        "Паспорт РФ"
+      ],
+      "register_url": "https://um.mos.ru/",
+      "source_name": "Узнай Москву, правила участия в экскурсиях",
+      "source_url": "https://um.mos.ru/news/pravila-uchastiya-v-ekskursiyah-leto-v-moskve-2026/",
+      "format": "offline"
+    },
+    {
+      "title": "Лекция об истории московских усадеб",
+      "topic": "lecture",
+      "venue": "Музей Москвы",
+      "district": "ЦАО",
+      "reg_opens": {
+        "hours": 5
+      },
+      "reg_closes": {
+        "days": 4,
+        "hour": 20
+      },
+      "starts": {
+        "days": 7,
+        "hour": 19
+      },
+      "eligibility": [
+        "student",
+        "schoolkid"
+      ],
+      "conditions": "Лекция по предварительной записи, места ограничены.",
+      "documents": [
+        "Студенческий или школьный билет"
+      ],
+      "register_url": "https://mosmuseum.ru/",
+      "source_name": "Сайт Музея Москвы",
+      "source_url": "https://mosmuseum.ru/",
+      "format": "online"
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Aperio — презентация</title>
+<style>
+  @page { size: 1600px 900px; margin: 0; }
+  :root {
+    --bg: #fafbfd; --surface: #f3f6f9; --line: #d6dae2; --ink: #0c1427;
+    --muted: #697592; --blue: #264ffc; --blue-soft: #ebf1fe; --bar: #475578; --danger: #d4443c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Gilroy, 'Segoe UI', system-ui, sans-serif; color: var(--ink); background: #e7eaf0; }
+  .slide {
+    width: 1600px; height: 900px; background: var(--bg); position: relative;
+    padding: 64px 72px; overflow: hidden; page-break-after: always; break-after: page;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  .num { position: absolute; right: 48px; bottom: 36px; font-size: 16px; color: #aab2c2; }
+  .mark { position: absolute; left: 72px; bottom: 36px; font-size: 16px; color: #aab2c2; letter-spacing: .04em; }
+  h1 { font-size: 46px; margin: 0 0 10px; letter-spacing: -.01em; }
+  h2 { font-size: 24px; margin: 0 0 14px; }
+  .sub { font-size: 21px; color: var(--muted); margin: 0 0 34px; }
+  p { font-size: 20px; line-height: 1.45; margin: 0 0 16px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 18px; }
+  b, strong { font-weight: 700; }
+  ul { margin: 0 0 16px; padding-left: 26px; }
+  li { font-size: 20px; line-height: 1.45; margin-bottom: 10px; }
+  .cols { display: grid; gap: 28px; }
+  .c2 { grid-template-columns: 1fr 1fr; }
+  .c3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card { background: #fff; border: 2px solid var(--line); border-radius: 22px; padding: 26px 28px; }
+  .card--blue { background: var(--blue-soft); border-color: var(--blue); }
+  .card--flat { background: var(--surface); border-color: var(--line); }
+  .card h3 { font-size: 22px; margin: 0 0 12px; }
+  .card p, .card li { font-size: 18px; line-height: 1.42; }
+  table { border-collapse: collapse; width: 100%; font-size: 19px; }
+  th { text-align: left; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; color: var(--bar); padding: 0 16px 12px 0; font-weight: 700; }
+  td { padding: 13px 16px 13px 0; border-top: 1.5px solid var(--line); vertical-align: top; line-height: 1.38; }
+  .scheme { width: 100%; height: auto; display: block; }
+  .shots { display: flex; gap: 26px; justify-content: space-between; align-items: flex-start; }
+  .shots img { width: 252px; border-radius: 20px; border: 2px solid var(--line); display: block; }
+  .shots figcaption { font-size: 15px; color: var(--muted); margin-top: 10px; text-align: center; line-height: 1.35; }
+  .fill { color: var(--danger); font-weight: 700; }
+  .kv { font-size: 20px; line-height: 1.5; margin: 0; }
+  .kv dt { color: var(--muted); font-size: 16px; text-transform: uppercase; letter-spacing: .05em; margin-top: 14px; }
+  .kv dd { margin: 4px 0 0; font-size: 20px; }
+  code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: .92em; background: var(--surface); padding: 2px 7px; border-radius: 6px; }
+  .title-slide { display: flex; flex-direction: column; justify-content: center; background: linear-gradient(140deg, #0c1427 0%, #1b2b63 60%, #264ffc 140%); color: #fff; }
+  .title-slide h1 { font-size: 64px; max-width: 1100px; }
+  .title-slide .sub { color: rgba(255,255,255,.72); font-size: 26px; }
+  .title-slide .num, .title-slide .mark { color: rgba(255,255,255,.4); }
+  .chip { display: inline-block; background: var(--blue-soft); color: var(--blue); border-radius: 40px; padding: 7px 18px; font-size: 17px; font-weight: 700; margin: 0 8px 8px 0; }
+  .lead-num { font-size: 40px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide">
+  <h1>Техническая информация</h1>
+  <p class="sub">Служебный слайд для проверяющего. Всё, что нужно, чтобы запустить и проверить решение.</p>
+  <div class="cols c2">
+    <div>
+      <dl class="kv">
+        <dt>Мини-приложение</dt><dd class="fill">[https://…twc1.net]</dd>
+        <dt>Бот в MAX</dt><dd class="fill">[https://max.ru/&lt;ник_бота&gt;]</dd>
+        <dt>Репозиторий</dt><dd class="fill">[ссылка], commit [hash]</dd>
+        <dt>Собственное API</dt><dd>Нет. Мини-приложение отдаёт готовые страницы; наружу смотрит только бот. Единственная внешняя интеграция — MAX Bot API и MAX Bridge.</dd>
+        <dt>Тестовые учётки</dt><dd>Не нужны: вход по подписи MAX, у любого пользователя мессенджера.</dd>
+        <dt>Переменные запуска</dt><dd><code>MAX_BOT_TOKEN</code>, <code>MAX_BOT_USERNAME</code>, <code>ADMIN_USER_IDS</code> — значения <span class="fill">[вписать здесь]</span>. Остальное по умолчанию из <code>.env.example</code>; рабочих секретов в репозитории нет.</dd>
+      </dl>
+    </div>
+    <div class="card card--blue">
+      <h3>Проверка за три минуты</h3>
+      <ol style="padding-left:24px;margin:0">
+        <li><code>/start</code> → «Открыть Aperio» → категория «Студент вуза или колледжа».</li>
+        <li>Главная: льготные дни музеев и окна записи уже под эту льготу.</li>
+        <li>Фильтры → «Экскурсии» → «Показать события» → «Уведомлять о таком».</li>
+        <li>Карточка события → сердечко → «Поделиться событием».</li>
+        <li><code>/demo</code> в боте → через 60 секунд уведомление приходит в чат.</li>
+      </ol>
+      <p class="small muted" style="margin-top:18px">Запуск у себя: <code>cp .env.example .env</code>, вписать токен, <code>docker compose up --build</code>. Сборка около минуты.</p>
+    </div>
+  </div>
+  <span class="mark">APERIO · MAX × МИНОБРНАУКИ · ДОСУГ И РАЗВЛЕЧЕНИЯ</span>
+  <span class="num">1</span>
+</section>
+
+<!-- 2 -->
+<section class="slide title-slide">
+  <h1>Aperio — бесплатный досуг Москвы без пропущенной записи</h1>
+  <p class="sub">Чат-бот и мини-приложение в MAX. Трек «Досуг и развлечения».</p>
+  <p class="sub" style="font-size:22px">Команда: <span class="fill" style="color:#ff9b95">[имена и роли]</span></p>
+  <span class="num">2</span>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <h1>Проблема</h1>
+  <p class="sub">Бесплатных возможностей в Москве много. Воспользоваться ими трудно по трём причинам.</p>
+  <div class="cols c3">
+    <div class="card">
+      <div class="lead-num">1</div>
+      <h3>Запись открывается без предупреждения</h3>
+      <p>500+ бесплатных экскурсий ко Всемирному дню туризма: анонс 14.09.2026, запись через Russpass до 16.09 — окно около двух суток.</p>
+      <p>«Лето в Москве»: запись открылась 11.06 на прогулки с 14.06.</p>
+    </div>
+    <div class="card">
+      <div class="lead-num">2</div>
+      <h3>Льготные дни у каждого музея свои</h3>
+      <p>Третьяковка: студенты — первое воскресенье, дети — третье, пенсионеры — последний вторник. Исторический — последнее воскресенье.</p>
+      <p>Плюс «Московская музейная неделя»: третья неделя месяца, у каждого музея свой день внутри неё.</p>
+    </div>
+    <div class="card">
+      <div class="lead-num">3</div>
+      <h3>Льгота не универсальна</h3>
+      <p>Обычно она действует только на постоянную экспозицию и требует документа.</p>
+      <p>Человек узнаёт об этом на входе — когда уже приехал.</p>
+    </div>
+  </div>
+  <div class="card card--blue" style="margin-top:28px">
+    <p style="margin:0"><b>Итог.</b> Человек либо платит там, где мог пройти бесплатно, либо приходит не в тот день, либо узнаёт о записи, когда мест уже нет.</p>
+  </div>
+  <span class="num">3</span>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <h1>Кому это нужно</h1>
+  <p class="sub">Один продукт, разные наборы правил.</p>
+  <div class="cols c2">
+    <div class="card card--blue">
+      <h3>Приоритетный сегмент — студенты московских вузов и колледжей</h3>
+      <p>Самый широкий набор льгот: бесплатные дни почти во всех городских музеях, студенческие лекции, экскурсии.</p>
+      <p>Привычка жить в мессенджере — продукт не требует ставить ещё одно приложение.</p>
+      <p>Понятный канал выхода: студсоветы, профкомы, вузовские паблики.</p>
+    </div>
+    <div class="card">
+      <h3>Дальше — по той же механике</h3>
+      <p>Меняется только справочник правил, продукт не меняется.</p>
+      <div style="margin-top:18px">
+        <span class="chip">Многодетные семьи</span><span class="chip">Пенсионеры</span><span class="chip">Школьники</span><span class="chip">Дети до 7 лет</span><span class="chip">Люди с инвалидностью</span><span class="chip">Ветераны</span>
+      </div>
+      <p class="small muted" style="margin-top:18px">Семь льготных категорий уже заведены в базе и участвуют в подборе событий и адресатов уведомлений.</p>
+    </div>
+  </div>
+  <span class="num">4</span>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h1>Было → стало</h1>
+  <p class="sub">Что именно меняется в жизни человека.</p>
+  <table>
+    <tr><th style="width:48%">Было</th><th>Стало</th></tr>
+    <tr><td>Следить за mos.ru, Мостуризмом и пабликами музеев</td><td>Одна подписка: тема, округ, формат</td></tr>
+    <tr><td>Узнать о записи, когда мест уже нет</td><td>Сообщение в MAX в момент открытия записи — задержка до 15 секунд</td></tr>
+    <tr><td>Держать в голове календари десятка музеев</td><td>Лента «Бесплатно по льготе» — сразу под вашу категорию</td></tr>
+    <tr><td>Прийти не в тот день или без документа</td><td>Условия, список документов и ссылка на первоисточник в карточке</td></tr>
+    <tr><td>Звать друзей пересказом</td><td>«Поделиться событием» — ссылка открывает карточку прямо в MAX</td></tr>
+  </table>
+  <span class="num">5</span>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <h1>Как это выглядит</h1>
+  <p class="sub">Живые экраны: данные настоящие, из базы проекта.</p>
+  <div class="shots" style="justify-content:center;gap:40px">
+    <figure style="margin:0"><img src="screens2/01_onboarding.png" alt=""><figcaption>Категория льготы<br>в один тап</figcaption></figure>
+    <figure style="margin:0"><img src="screens2/02_home.png" alt=""><figcaption>Лента под вашу<br>льготу</figcaption></figure>
+    <figure style="margin:0"><img src="screens2/05_item.png" alt=""><figcaption>Карточка: условия,<br>полоса сроков записи</figcaption></figure>
+    <figure style="margin:0"><img src="screens2/10_admin.png" alt=""><figcaption>Админка: ведение<br>данных и проверка</figcaption></figure>
+  </div>
+  <p class="small muted" style="margin-top:26px">Мини-приложение отдаёт готовые страницы, а не одностраничное приложение: открывается быстро и по медленной сети, и внутри браузера MAX. Адаптация — 320, 390, от 700 (две колонки) и от 1024 px (три колонки), вырезы учтены через <code>env(safe-area-inset-*)</code>.</p>
+  <span class="num">6</span>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <h1>Что мы берём от MAX</h1>
+  <p class="sub">Не «сайт внутри мессенджера», а то, что без мессенджера не работает.</p>
+  <div class="cols c2">
+    <div>
+      <div class="card" style="margin-bottom:22px">
+        <h3>Bot API</h3>
+        <p>Long polling, сообщения с кнопками, список команд, кнопка запуска мини-приложения.</p>
+      </div>
+      <div class="card" style="margin-bottom:22px">
+        <h3><code>initData</code></h3>
+        <p>Вход без единого поля регистрации: подпись проверяется на сервере по HMAC-SHA256.</p>
+      </div>
+      <div class="card">
+        <h3><code>start_param</code></h3>
+        <p>Диплинк в конкретную карточку: друг по ссылке попадает сразу на событие и видит, подходит ли льгота ему.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:22px">
+        <h3><code>shareMaxContent</code></h3>
+        <p>«Поделиться событием» открывает выбор чата внутри MAX. Вне MAX ссылка копируется в буфер.</p>
+      </div>
+      <div class="card" style="margin-bottom:22px">
+        <h3><code>BackButton</code>, <code>HapticFeedback</code>, <code>openLink</code></h3>
+        <p>Навигация ощущается родной для мессенджера, а не веб-страницей в рамке.</p>
+      </div>
+      <div class="card card--blue">
+        <h3>Две особенности платформы, которые мы учли</h3>
+        <p>Во встроенном окне MAX сторонние cookie могут быть заблокированы — поэтому сессия живёт ещё и в подписанном токене в адресе.</p>
+        <p>У GET-форм браузер отбрасывает строку запроса из <code>action</code> — токен кладём скрытым полем, иначе поиск и фильтры выбрасывали бы на экран входа.</p>
+      </div>
+    </div>
+  </div>
+  <span class="num">7</span>
+</section>
+
+<!-- 8 -->
+<section class="slide" style="padding:44px 56px">
+  <img class="scheme" src="schemes/01-architecture.png" alt="Архитектура">
+  <span class="num">8</span>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h1>Данные: почему мы ведём их сами</h1>
+  <p class="sub">Мы проверили открытые источники и сознательно отказались от автоматического импорта.</p>
+  <div class="cols c3" style="margin-bottom:26px">
+    <div class="card card--flat">
+      <h3>Набор «События» Минкультуры</h3>
+      <p class="muted">opendata.mkrf.ru</p>
+      <p>Заморожен с 2021 года. Будущих бесплатных событий по Москве в нём нет.</p>
+    </div>
+    <div class="card card--flat">
+      <h3>Событийные наборы data.mos.ru</h3>
+      <p class="muted">открытые данные города</p>
+      <p>Отчётные выгрузки на несколько десятков записей — без момента открытия записи.</p>
+    </div>
+    <div class="card card--blue">
+      <h3>Момент открытия записи</h3>
+      <p class="muted">не публикует никто</p>
+      <p>Это и есть то, ради чего существует продукт, — и именно этого нет ни в одном фиде.</p>
+    </div>
+  </div>
+  <div class="cols c2">
+    <div class="card">
+      <h3>Что в базе вместо импорта</h3>
+      <p><b>20 реальных площадок</b> Москвы в шести округах, <b>17 льготных правил</b>, <b>7 окон записи</b>.</p>
+      <p>Третьяковка, ГМИИ, Исторический музей, Дарвиновский, Музей космонавтики, Царицыно, Кусково, ВДНХ, Музей Победы, Музей Москвы, ММОМА и другие.</p>
+      <p class="small muted">У каждой записи — название источника, ссылка и дата сверки. Выдуманных площадок и выдуманных льгот в наборе нет.</p>
+    </div>
+    <div class="card">
+      <h3>Льготные дни хранятся правилом, а не датами</h3>
+      <p>Мы храним «третье воскресенье» или «последний вторник» и считаем даты на любую глубину — вести календарь руками не нужно.</p>
+      <p>Правило «Московская музейная неделя» реализовано как день недели внутри третьей календарной недели месяца и <b>проверено на 12 официальных датах Дарвиновского музея за 2026 год: совпали все двенадцать</b>.</p>
+    </div>
+  </div>
+  <span class="num">9</span>
+</section>
+
+<!-- 10 -->
+<section class="slide" style="padding:44px 56px">
+  <img class="scheme" src="schemes/04-notifications.png" alt="Механика уведомлений">
+  <span class="num">10</span>
+</section>
+
+<!-- 11 -->
+<section class="slide" style="padding:44px 56px">
+  <img class="scheme" src="schemes/03-data.png" alt="Схема данных">
+  <span class="num">11</span>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <h1>Админка: роли и журнал правок</h1>
+  <p class="sub">Данные ведут люди — значит, видно, кто и что сделал.</p>
+  <div class="cols c2">
+    <div>
+      <div class="card card--blue" style="margin-bottom:22px">
+        <h3>Две роли, самостоятельной регистрации нет</h3>
+        <p><b>Главные администраторы</b> заданы переменной <code>ADMIN_USER_IDS</code>: список правится только на сервере, через интерфейс снять их нельзя.</p>
+        <p><b>Редакторы</b> ведут окна записи и льготные дни, но не выдают доступ другим. Их добавляет главный администратор прямо в интерфейсе, без перезапуска контейнера.</p>
+        <p class="small muted">Обычный пользователь админки не видит и попасть в неё не может.</p>
+      </div>
+      <div class="card">
+        <h3>Вопрос администратору</h3>
+        <p>Команда <code>/admin</code> в боте: сообщение уходит главным администраторам, ответ возвращается пользователю в чат.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:22px">
+        <h3>Журнал правок</h3>
+        <p>Кто создал, изменил или удалил запись — и когда. Название хранится снимком, поэтому удалённая запись остаётся читаемой.</p>
+      </div>
+      <div class="card" style="margin-bottom:22px">
+        <h3>Охват виден в форме</h3>
+        <p>Прямо при создании события видно, скольким людям уйдёт уведомление, — ошибиться фильтром сложнее.</p>
+      </div>
+      <div class="card card--flat">
+        <h3>Кнопки проверки</h3>
+        <p>«Окно: запись через минуту» и «Льготный день на завтра» создают проверочные объекты. Удаляются как обычные записи.</p>
+      </div>
+    </div>
+  </div>
+  <span class="num">12</span>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <h1>Безопасность</h1>
+  <p class="sub">Что сделано, чтобы чужой не попал внутрь и не написал от нашего имени.</p>
+  <div class="cols c2">
+    <div>
+      <div class="card" style="margin-bottom:20px">
+        <h3>Вход</h3>
+        <p>Только по подписи <code>initData</code> (HMAC-SHA256). Срок годности данных запуска ограничен, просроченные не принимаются.</p>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <h3>Сессия</h3>
+        <p>Подписанный токен со сроком. У главных администраторов срок короче, потому что токен виден в адресной строке.</p>
+      </div>
+      <div class="card">
+        <h3>Рассылка от имени бота</h3>
+        <p>Отправить сообщение произвольному пользователю может только главный администратор — команда проверяет права, а не доверяет отправителю.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:20px">
+        <h3>Дев-вход</h3>
+        <p>Вход по номеру без подписи существует для локальной проверки, но выключен по умолчанию. Если включить его на публичном адресе, <code>web</code> пишет предупреждение в лог.</p>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <h3>Секреты</h3>
+        <p>В репозитории нет рабочих токенов и паролей: <code>.env</code> не коммитится, есть только <code>.env.example</code> без значений. На хостинге переменные задаются в панели.</p>
+      </div>
+      <div class="card">
+        <h3>Запросы к базе</h3>
+        <p>Все значения передаются параметрами. В динамической вставке участвуют только имена столбцов, и они проверяются по форме перед подстановкой.</p>
+      </div>
+    </div>
+  </div>
+  <span class="num">13</span>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <h1>Масштабирование</h1>
+  <p class="sub">Ядро написано один раз. Расширение — это данные и адаптеры, а не новый код.</p>
+  <div class="cols c2" style="margin-bottom:22px">
+    <div class="card card--blue" style="padding:18px 24px">
+      <p style="margin:0;font-size:18px"><b>Не меняется при росте:</b> модель «событие + условия доступа», подбор получателей, механизм уведомлений, интерфейс.</p>
+    </div>
+    <div class="card card--flat" style="padding:18px 24px">
+      <p style="margin:0;font-size:18px"><b>Меняется:</b> справочник правил региона, список площадок, адаптер источника окон записи.</p>
+    </div>
+  </div>
+  <table style="margin-bottom:22px">
+    <tr><th style="width:34%">Шаг</th><th style="width:33%">Что добавляется</th><th>Что переиспользуется</th></tr>
+    <tr><td>Студенты одного вуза</td><td>канал распространения</td><td>всё</td></tr>
+    <tr><td>Все вузы Москвы</td><td>ничего</td><td>всё</td></tr>
+    <tr><td>Другой город — Казань, Санкт-Петербург</td><td>список площадок и правил региона</td><td>ядро целиком</td></tr>
+    <tr><td>Другой тип досуга — тренировки в парках, волонтёрство, детские мастерские</td><td>новая тема в справочнике</td><td>ядро целиком</td></tr>
+    <tr><td>Партнёрский фид — Russpass, Мостуризм</td><td>адаптер источника</td><td>ядро целиком</td></tr>
+  </table>
+  <div class="cols c2">
+    <div class="card" style="padding:20px 24px">
+      <h3 style="margin-bottom:8px">Техническая готовность к нагрузке</h3>
+      <p style="font-size:17px;line-height:1.38;margin:0">Три процесса уже разделены и масштабируются по отдельности. <code>web</code> — горизонтально за балансировщиком: состояние в подписанном токене, а не в памяти процесса. Уведомления идемпотентны на уровне базы, поэтому несколько экземпляров <code>worker</code> не пришлют дубль. Один экземпляр обязателен только для <code>bot</code> — из-за long polling; переход на webhook снимает это ограничение.</p>
+    </div>
+    <div class="card" style="padding:20px 24px">
+      <h3 style="margin-bottom:8px">Что станет узким местом раньше всего</h3>
+      <p style="font-size:17px;line-height:1.38;margin:0">Не код, а сверка правил: у льгот нет владельца, который публиковал бы их машиночитаемо. Отсюда дата проверки у каждой записи, кнопка «условия изменились» в планах и партнёрство с площадками как главный шаг пилота.</p>
+    </div>
+  </div>
+  <span class="num">14</span>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <h1>Метрики и пилот</h1>
+  <p class="sub">Что меряем сейчас и что проверим на живых людях.</p>
+  <table style="margin-bottom:30px">
+    <tr><th style="width:24%">Уровень</th><th style="width:50%">Метрика</th><th>Когда проверяем</th></tr>
+    <tr><td>Работает сейчас</td><td>Задержка «запись открылась → сообщение в чате»</td><td>в демо, до 15 секунд</td></tr>
+    <tr><td>Результат пользователя</td><td>Путь до ссылки на запись — один тап вместо ручного мониторинга нескольких источников</td><td>в демо</td></tr>
+    <tr><td>Наблюдаемое изменение</td><td>Доля подписчиков, успевших записаться; бесплатные посещения на человека в месяц</td><td>пилот</td></tr>
+    <tr><td>Долгосрочный эффект</td><td>Доля отказов на входе из-за неподходящей льготы</td><td>пилот</td></tr>
+  </table>
+  <div class="card card--blue">
+    <h3>Пилот: один московский вуз, месяц</h3>
+    <p>Канал — студсовет и паблик вуза. Вуз получает возможность публиковать собственные бесплатные события через Aperio, мы — живой поток пользователей и обратную связь по правилам.</p>
+    <p style="margin:0">Следующий шаг после успеха: официальный фид окон записи и тиражирование на вузы Москвы.</p>
+  </div>
+  <span class="num">15</span>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <h1>Ограничения и что дальше</h1>
+  <p class="sub">Что мы знаем про слабые места решения.</p>
+  <div class="cols c2">
+    <div class="card">
+      <h3>Честные ограничения сегодня</h3>
+      <ul style="margin:0">
+        <li>Окна записи заводятся вручную по анонсам: момент открытия записи не публикует ни один открытый источник.</li>
+        <li>Льготные правила требуют периодической сверки с сайтами музеев — отсюда дата проверки у каждой записи.</li>
+        <li>Long polling вместо webhook, бот рассчитан на один экземпляр.</li>
+        <li>Часовой пояс фиксирован московским, праздничные исключения не учитываются.</li>
+        <li>Повторяющееся событие заводится заново — дублирования окна по правилу пока нет.</li>
+      </ul>
+    </div>
+    <div class="card card--blue">
+      <h3>Ближайшие шаги</h3>
+      <ul style="margin:0">
+        <li>Webhook вместо long polling и несколько экземпляров <code>worker</code>.</li>
+        <li>Партнёрский фид окон записи — Russpass, Мостуризм.</li>
+        <li>Кнопка «условия изменились»: сверка правил руками пользователей.</li>
+        <li>Повторяющиеся окна записи по правилу.</li>
+        <li>Геопоиск и календарь льготных дней в мини-приложении.</li>
+      </ul>
+    </div>
+  </div>
+  <span class="num">16</span>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <h1>Источники</h1>
+  <p class="sub">Каждое правило и каждое окно в базе снабжены ссылкой и датой сверки.</p>
+  <div class="cols c2">
+    <div>
+      <p><b>Город</b><br><span class="muted">mos.ru — «Московская музейная неделя», акции Мостуризма, «Лето в Москве» (11.06.2025). Russpass — проект «Москва. Традиции. Люди». «Узнай Москву» — правила участия в экскурсиях. «Открой#Моспром».</span></p>
+      <p><b>Обзоры</b><br><span class="muted">Ведомости.Город — календарь бесплатных дней музеев Москвы.</span></p>
+      <p><b>Платформа</b><br><span class="muted">Документация MAX: dev.max.ru/docs, dev.max.ru/docs-api.</span></p>
+    </div>
+    <div>
+      <p><b>Официальные страницы площадок</b><br><span class="muted">Третьяковская галерея · ГМИИ им. А. С. Пушкина · Исторический музей · Дарвиновский музей · Музей космонавтики · Царицыно · усадьба Кусково · МГОМЗ · Музей Москвы · ММОМА · Музей Победы · Музей Банка России · музей Булгакова · ВДНХ (лекторий) · «Выставочные залы Москвы»</span></p>
+    </div>
+  </div>
+  <span class="num">17</span>
+</section>
+
+</body>
+</html>

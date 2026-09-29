@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" font-family="Gilroy, 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#475578"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#264ffc"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#d4443c"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#fafbfd"/>
+
+  <text x="64" y="72" font-size="38" font-weight="700" fill="#0c1427">Механика уведомлений</text>
+  <text x="64" y="106" font-size="20" fill="#697592">worker просыпается раз в 15 секунд. Ни одно сообщение не уходит дважды — даже если процесс перезапустили.</text>
+
+  <!-- step 1: triggers -->
+  <rect x="64" y="150" width="400" height="392" rx="22" fill="#ffffff" stroke="#475578" stroke-width="2"/>
+  <text x="96" y="196" font-size="22" font-weight="700" fill="#0c1427">1 · Четыре повода написать</text>
+
+  <rect x="96" y="220" width="336" height="66" rx="16" fill="#ebf1fe"/>
+  <text x="118" y="250" font-size="18" font-weight="700" fill="#264ffc">Открылась запись</text>
+  <text x="118" y="274" font-size="15" fill="#697592">наступил reg_opens_at</text>
+
+  <rect x="96" y="298" width="336" height="66" rx="16" fill="#f3f6f9"/>
+  <text x="118" y="328" font-size="18" font-weight="700" fill="#0c1427">Запись закрывается завтра</text>
+  <text x="118" y="352" font-size="15" fill="#697592">только избранное, окно длиннее 36 часов</text>
+
+  <rect x="96" y="376" width="336" height="66" rx="16" fill="#f3f6f9"/>
+  <text x="118" y="406" font-size="18" font-weight="700" fill="#0c1427">Событие завтра</text>
+  <text x="118" y="430" font-size="15" fill="#697592">только избранное</text>
+
+  <rect x="96" y="454" width="336" height="66" rx="16" fill="#f3f6f9"/>
+  <text x="118" y="484" font-size="18" font-weight="700" fill="#0c1427">Завтра льготный день</text>
+  <text x="118" y="508" font-size="15" fill="#697592">по правилу повторения, пишем с 10 до 21</text>
+
+  <path d="M468 346 L520 346" stroke="#475578" stroke-width="2.5" fill="none" marker-end="url(#a)"/>
+
+  <!-- step 2: recipients -->
+  <rect x="524" y="150" width="440" height="392" rx="22" fill="#ffffff" stroke="#475578" stroke-width="2"/>
+  <text x="556" y="196" font-size="22" font-weight="700" fill="#0c1427">2 · Кому это нужно</text>
+
+  <rect x="556" y="220" width="376" height="120" rx="16" fill="#ebf1fe"/>
+  <text x="578" y="252" font-size="18" font-weight="700" fill="#264ffc">Отметил сердечком</text>
+  <text x="578" y="280" font-size="15" fill="#697592">строка в reminders по этому событию.</text>
+  <text x="578" y="304" font-size="15" fill="#697592">Ползунок выключен (muted) — пропускаем,</text>
+  <text x="578" y="328" font-size="15" fill="#697592">событие остаётся в списке.</text>
+
+  <rect x="556" y="352" width="376" height="120" rx="16" fill="#ebf1fe"/>
+  <text x="578" y="384" font-size="18" font-weight="700" fill="#264ffc">Подписался на такое</text>
+  <text x="578" y="412" font-size="15" fill="#697592">сохранённый фильтр в subscriptions</text>
+  <text x="578" y="436" font-size="15" fill="#697592">совпал по теме, округу и формату.</text>
+  <text x="578" y="460" font-size="15" fill="#697592">Пустое поле фильтра значит «любой».</text>
+
+  <rect x="556" y="484" width="376" height="42" rx="12" fill="#f3f6f9"/>
+  <text x="578" y="511" font-size="15" fill="#475578">И всегда: льгота человека есть в eligibility</text>
+
+  <path d="M968 346 L1020 346" stroke="#475578" stroke-width="2.5" fill="none" marker-end="url(#a)"/>
+
+  <!-- step 3: idempotency -->
+  <rect x="1024" y="150" width="512" height="392" rx="22" fill="#ebf1fe" stroke="#264ffc" stroke-width="2"/>
+  <text x="1056" y="196" font-size="22" font-weight="700" fill="#0c1427">3 · Отправка ровно один раз</text>
+
+  <rect x="1056" y="220" width="448" height="62" rx="16" fill="#ffffff"/>
+  <text x="1078" y="248" font-size="17" font-weight="700" fill="#0c1427">Сначала бронируем ключ</text>
+  <text x="1078" y="270" font-size="15" fill="#475578">INSERT … ON CONFLICT DO NOTHING → reg_open:w12</text>
+
+  <rect x="1056" y="294" width="448" height="62" rx="16" fill="#ffffff"/>
+  <text x="1078" y="322" font-size="17" font-weight="700" fill="#0c1427">Ключ уже занят — молчим</text>
+  <text x="1078" y="344" font-size="15" fill="#475578">перезапуск worker не рождает второе сообщение</text>
+
+  <rect x="1056" y="368" width="448" height="62" rx="16" fill="#ffffff"/>
+  <text x="1078" y="396" font-size="17" font-weight="700" fill="#0c1427">Только теперь отправляем</text>
+  <text x="1078" y="418" font-size="15" fill="#475578">пауза 60 мс: лимит MAX — 2 сообщения в секунду</text>
+
+  <rect x="1056" y="442" width="448" height="84" rx="16" fill="#ffffff"/>
+  <text x="1078" y="470" font-size="17" font-weight="700" fill="#d4443c">Не получилось?</text>
+  <text x="1078" y="492" font-size="15" fill="#475578">Нет связи — снимаем бронь, повторим через 15 с.</text>
+  <text x="1078" y="514" font-size="15" fill="#475578">403 или 404 — бота заблокировали, больше не пишем.</text>
+
+  <!-- bottom: why it matters -->
+  <rect x="64" y="580" width="728" height="284" rx="22" fill="#ffffff" stroke="#d6dae2" stroke-width="2"/>
+  <text x="96" y="624" font-size="22" font-weight="700" fill="#0c1427">Почему не «раз в сутки по расписанию»</text>
+  <text x="96" y="664" font-size="17" fill="#697592">Ценность продукта — попасть в момент открытия записи, а не рассказать</text>
+  <text x="96" y="690" font-size="17" fill="#697592">о нём назавтра: на бесплатные экскурсии места разбирают за часы.</text>
+  <text x="96" y="724" font-size="17" fill="#697592">Поэтому цикл короткий, а защита от дубля — на уровне базы, а не памяти</text>
+  <text x="96" y="750" font-size="17" fill="#697592">процесса. Задержка от наступления события до сообщения — до 15 секунд.</text>
+  <text x="96" y="790" font-size="17" fill="#697592">Ночью не пишем, на одно окно — одно сообщение, каждое из них</text>
+  <text x="96" y="816" font-size="17" fill="#697592">выключается ползунком. Заблокировавшим бота не пишем совсем.</text>
+
+  <rect x="816" y="580" width="720" height="284" rx="22" fill="#f3f6f9" stroke="#d6dae2" stroke-width="2"/>
+  <text x="848" y="624" font-size="22" font-weight="700" fill="#0c1427">Как это проверить</text>
+  <text x="848" y="664" font-size="17" fill="#697592">/demo в боте — личное окно, откроется через 60 секунд,</text>
+  <text x="848" y="690" font-size="17" fill="#697592">уведомление придёт только вам.</text>
+  <text x="848" y="724" font-size="17" fill="#697592">«Окно: запись через минуту» в админке — то же самое,</text>
+  <text x="848" y="750" font-size="17" fill="#697592">но для всех, у кого совпала подписка.</text>
+  <text x="848" y="790" font-size="17" fill="#697592">«Льготный день на завтра» в админке — правило на завтрашний</text>
+  <text x="848" y="816" font-size="17" fill="#697592">день недели; уведомление уйдёт ближайшим проходом.</text>
+</svg>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% set tab = 'profile' %}
+{% block content %}
+<main class="screen" data-back="/profile">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/profile" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>Прошедшие события</h1>
+  </div>
+  <p class="lead">События, на которые вы записались и которые уже прошли.</p>
+
+  {% if items %}
+    <ul class="list">
+      {% for item in items %}<li>{% include "_card.html" %}</li>{% endfor %}
+    </ul>
+  {% else %}
+    <div class="state">
+      <p class="state__title">Пока пусто</p>
+      <p class="state__text">Отмечайте события сердечком — после того как они пройдут, они появятся здесь.</p>
+      <a class="btn btn--secondary" href="/catalog">Открыть каталог</a>
+    </div>
+  {% endif %}
+</main>
+{% endblock %}

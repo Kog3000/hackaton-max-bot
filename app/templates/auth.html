@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Aperio | Бесплатные мероприятия</title>
+  <link rel="stylesheet" href="/static/css/app.css">
+  <script src="https://st.max.ru/js/max-web-app.js"></script>
+</head>
+<body data-ready="{{ ready }}" data-next="{{ next_url }}">
+<div class="splash">
+  <span class="splash__logo"><img src="/static/logo.svg" alt=""></span>
+  <p class="splash__name">Aperio</p>
+  <p id="auth-error" class="state__text" style="color:#fff;opacity:.8;display:none"></p>
+  <p id="auth-hint" class="state__text" style="color:#fff;opacity:.5;font-size:13px;display:none"></p>
+</div>
+<script>
+// Берём данные запуска у MAX и обмениваем их на сессию.
+(async () => {
+  const SPLASH_MS = 2200;                 // заставка висит не меньше двух секунд
+  const started = Date.now();
+  const hold = () => new Promise((r) => setTimeout(r, Math.max(0, SPLASH_MS - (Date.now() - started))));
+  const ready = document.body.dataset.ready;
+  const wa = window.WebApp;
+
+  if (ready) { await hold(); location.replace(ready); return; }
+  const params = new URLSearchParams(location.search);
+  const body = new FormData();
+  body.append('init_data', wa && wa.initData ? wa.initData : '');
+  body.append('start_param', (wa && wa.initDataUnsafe && wa.initDataUnsafe.start_param) || params.get('startapp') || '');
+  body.append('next_url', document.body.dataset.next || '');
+  if (params.get('dev')) body.append('dev_id', params.get('dev'));
+  try {
+    const res = await fetch('/auth', { method: 'POST', body, credentials: 'same-origin' });
+    if (!res.ok) throw new Error(((await res.json().catch(() => ({}))).error) || 'Не удалось войти');
+    const data = await res.json();
+    try { sessionStorage.setItem('aperio_session', data.token); } catch (e) {}
+    await hold();
+    location.replace(data.redirect);
+  } catch (e) {
+    const box = document.getElementById('auth-error');
+    const hint = document.getElementById('auth-hint');
+    box.textContent = e.message || 'Не удалось войти';
+    box.style.display = 'block';
+    hint.textContent = 'MAX Bridge: ' + (wa ? 'подключён' : 'не подключён')
+      + ', данные запуска: ' + (wa && wa.initData ? wa.initData.length + ' символов' : 'нет')
+      + ', платформа: ' + ((wa && wa.platform) || 'браузер');
+    hint.style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>

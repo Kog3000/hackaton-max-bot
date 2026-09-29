@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% block content %}
+<main class="screen" data-back="/home">
+  {% include "_topbar.html" %}
+  <h1 class="page-title">{{ 'Кому положены льготы?' if mode == 'first' else 'Сменить категорию' }}</h1>
+  <p class="lead">От этого зависит, куда вам можно бесплатно. Документы не нужны — только выбор. Изменить можно в любой момент.</p>
+
+  <form method="post" action="/category">
+    <input type="hidden" name="next_url" value="{{ back_url }}">
+    <div class="options" role="radiogroup" aria-label="Категория льготы" style="margin-top:18px">
+      {% for cid, full, short, hint in CATEGORIES %}
+      <label class="option">
+        <input type="radio" name="category" value="{{ cid }}" class="visually-hidden" {{ 'checked' if user.category == cid }}>
+        <span class="option__title">{{ full }}</span>
+        <span class="option__hint">{{ hint }}</span>
+      </label>
+      {% endfor %}
+    </div>
+    <div class="sticky-actions">
+      <button class="btn btn--primary" type="submit">Показать, что доступно</button>
+      {% if mode == 'first' %}
+      <button class="btn btn--secondary" type="submit" name="skip" value="1">Пропустить</button>
+      {% else %}
+      <a class="btn btn--secondary" href="{{ back_url }}">Отмена</a>
+      {% endif %}
+    </div>
+  </form>
+</main>
+{% endblock %}

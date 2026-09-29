@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% set actions = {'created': 'создал', 'updated': 'изменил', 'deleted': 'удалил', 'granted': 'выдал доступ', 'revoked': 'снял доступ'} %}
+{% set entities = {'window': 'окно записи', 'rule': 'льготный день', 'editor': 'редактору', 'probe': 'проверочный объект'} %}
+{% block content %}
+<main class="screen" data-back="/admin">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/admin" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>Журнал правок</h1>
+  </div>
+  <p class="lead">Последние 100 действий в админке. Названия сохраняются снимком, поэтому удалённые записи остаются читаемыми.</p>
+
+  {% if not entries %}
+    <div class="state"><p class="state__title">Пока пусто</p><p class="state__text">Здесь появятся правки окон записи и льготных дней.</p></div>
+  {% else %}
+    <ul class="list">
+      {% for e in entries %}
+      <li><div class="row">
+        <span class="row__body">
+          <span class="row__title">{{ e.first_name or e.user_id }} {{ actions.get(e.action, e.action) }} {{ entities.get(e.entity, e.entity) }}</span>
+          <span class="row__sub">{{ e.title or e.entity_id }}</span>
+        </span>
+        <span class="tag">{{ e.at|dt }}</span>
+      </div></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</main>
+{% endblock %}

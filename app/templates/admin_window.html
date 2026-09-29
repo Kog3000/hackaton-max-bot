@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% block content %}
+<main class="screen" data-back="/admin">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/admin" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>{{ 'Окно записи' if item else 'Новое окно записи' }}</h1>
+  </div>
+  <p class="lead">Заведите окно по анонсу — подписчики получат сообщение в момент открытия записи.</p>
+  {% if item %}<p class="admin-meta">Напоминаний: {{ item.reminders_count }}. Уведомлений отправлено: {{ item.notified_count }}.</p>{% endif %}
+
+  <form method="post" action="/admin/window">
+    <input type="hidden" name="window_id" value="{{ item.id if item else '' }}">
+
+    <section class="form-section">
+      <h2>Событие</h2>
+      <div class="field"><label for="title">Название</label>
+        <input id="title" name="title" maxlength="200" required value="{{ item.title if item else '' }}" placeholder="Экскурсия по Китай-городу"></div>
+      <div class="field-group">
+        <div class="field"><label for="topic">Тема</label>
+          <select id="topic" name="topic">{% for tid, tlabel in TOPICS %}<option value="{{ tid }}" {{ 'selected' if item and item.topic == tid }}>{{ tlabel }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="format">Формат</label>
+          <select id="format" name="format">{% for fid, flabel in FORMATS %}<option value="{{ fid }}" {{ 'selected' if item and item.format == fid }}>{{ flabel }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label for="district">Округ</label>
+          <select id="district" name="district">{% for d in DISTRICTS %}<option value="{{ d }}" {{ 'selected' if item and item.district == d }}>{{ d }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="field"><label for="venue_id">Площадка</label>
+        <select id="venue_id" name="venue_id">
+          <option value="">Без площадки</option>
+          {% for v in venues %}<option value="{{ v.id }}" {{ 'selected' if item and item.venue_id == v.id }}>{{ v.name }} ({{ v.district }})</option>{% endfor %}
+        </select>
+        <p class="field__hint">Или впишите новую ниже</p></div>
+      <div class="field-group">
+        <div class="field"><label for="venue_name">Новая площадка</label><input id="venue_name" name="venue_name" maxlength="200"></div>
+        <div class="field"><label for="venue_address">Адрес</label><input id="venue_address" name="venue_address" maxlength="300"></div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>Сроки (время московское)</h2>
+      <div class="field"><label for="reg_opens_at">Запись открывается</label>
+        <input id="reg_opens_at" type="datetime-local" name="reg_opens_at" required value="{{ item.reg_opens_at|mskinput if item else '' }}"></div>
+      <div class="field"><label for="reg_closes_at">Запись закрывается</label>
+        <input id="reg_closes_at" type="datetime-local" name="reg_closes_at" required value="{{ item.reg_closes_at|mskinput if item else '' }}"></div>
+      <div class="field"><label for="starts_at">Начало события</label>
+        <input id="starts_at" type="datetime-local" name="starts_at" required value="{{ item.starts_at|mskinput if item else '' }}"></div>
+      <p class="field__hint">Если время открытия уже прошло, уведомление уйдёт сразу после сохранения.</p>
+    </section>
+
+    <section class="form-section">
+      <h2>Кому доступно</h2>
+      <div class="chips chips--wrap">
+        {% for cid, full, short, hint in CATEGORIES %}{% if cid != 'none' %}
+        <label class="chip {{ 'chip--on' if item and cid in item.eligibility }}">
+          <input type="checkbox" name="eligibility" value="{{ cid }}" class="visually-hidden" {{ 'checked' if item and cid in item.eligibility }}>{{ short }}
+        </label>
+        {% endif %}{% endfor %}
+      </div>
+      <p class="reach">Ничего не отмечено — событие доступно всем.</p>
+      <div class="field"><label for="conditions">Условия</label><textarea id="conditions" name="conditions" rows="3" maxlength="1000">{{ item.conditions if item and item.conditions else '' }}</textarea></div>
+      <div class="field"><label for="documents">Взять с собой</label><textarea id="documents" name="documents" rows="2">{{ item.documents|join('\n') if item else '' }}</textarea>
+        <p class="field__hint">Каждый документ с новой строки</p></div>
+    </section>
+
+    <section class="form-section">
+      <h2>Ссылки и источник</h2>
+      <div class="field"><label for="register_url">Где записаться</label><input id="register_url" type="url" name="register_url" placeholder="https://" value="{{ item.register_url if item and item.register_url else '' }}"></div>
+      <div class="field"><label for="image_url">Обложка</label><input id="image_url" name="image_url" placeholder="/static/img/… или https://" value="{{ item.cover_url if item and item.cover_url else '' }}"></div>
+      <div class="field"><label for="source_name">Источник анонса</label><input id="source_name" name="source_name" required value="{{ item.source_name if item else '' }}" placeholder="mos.ru, новость Мостуризма"></div>
+      <div class="field"><label for="source_url">Ссылка на анонс</label><input id="source_url" type="url" name="source_url" placeholder="https://" value="{{ item.source_url if item and item.source_url else '' }}"></div>
+    </section>
+
+    <div class="sticky-actions">
+      <button class="btn btn--primary" type="submit">{{ 'Сохранить изменения' if item else 'Создать окно' }}</button>
+    </div>
+  </form>
+
+  {% if item %}
+  <form method="post" action="/admin/window/{{ item.id }}/delete">
+    <button class="btn btn--danger" type="submit">Удалить окно</button>
+  </form>
+  {% endif %}
+</main>
+{% endblock %}

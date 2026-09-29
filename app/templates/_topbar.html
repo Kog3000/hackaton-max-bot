@@ -1,0 +1,6 @@
+{# Логотип и название: одинаковые на всех экранах #}
+<header class="topbar">
+  <span class="topbar__logo"><img src="/static/logo.svg" alt=""></span>
+  <span class="topbar__name">Aperio</span>
+  {% if topbar_right %}<span class="topbar__spacer"></span>{{ topbar_right }}{% endif %}
+</header>

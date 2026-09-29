@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% set tab = 'favorites' %}
+{% block content %}
+<main class="screen">
+  {% include "_topbar.html" %}
+  <h1 class="page-title">Избранное</h1>
+  <p class="lead">Льготные дни и события, которые вы отметили сердечком.</p>
+  {% if items %}
+    <ul class="list" style="margin-top:18px">{% for item in items %}<li>{% include "_card.html" %}</li>{% endfor %}</ul>
+  {% else %}
+    <div class="state">
+      <p class="state__title">Пока пусто</p>
+      <p class="state__text">В разделе «Бесплатно по льготе» нажмите на сердечко на карточке. У событий с записью сердечко на странице события.</p>
+      <a class="btn btn--secondary" href="/catalog">Смотреть события</a>
+    </div>
+  {% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% block content %}
+<main class="screen" data-back="/catalog">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/catalog" aria-label="Закрыть фильтры"><span class="ic ic--x" style="--ic:url(/static/icons/at-icons_cross.svg)"></span></a>
+    <h1>Фильтры</h1>
+  </div>
+
+  <form method="get" action="/catalog">
+    <div class="filters__group">
+      <h2>Категории</h2>
+      <div class="chips chips--wrap" data-group>
+        <label class="chip {{ 'chip--on' if not filter.topics }}" data-all>
+          <input type="checkbox" {{ 'checked' if not filter.topics }}>Все
+        </label>
+        {% for tid, tlabel in TOPICS %}
+        <label class="chip">
+          <input type="checkbox" name="topic" value="{{ tid }}" {{ 'checked' if tid in filter.topics }}>{{ tlabel }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="filters__group">
+      <h2>Что показывать</h2>
+      <div class="chips chips--wrap" data-group>
+        <label class="chip {{ 'chip--on' if not filter.kinds }}" data-all>
+          <input type="checkbox" {{ 'checked' if not filter.kinds }}>Всё
+        </label>
+        {% for kid, klabel in [('benefit', 'Льготные дни'), ('registration', 'Запись на события')] %}
+        <label class="chip">
+          <input type="checkbox" name="kind" value="{{ kid }}" {{ 'checked' if kid in filter.kinds }}>{{ klabel }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="filters__group">
+      <h2>Формат</h2>
+      <div class="chips chips--wrap" data-group>
+        <label class="chip {{ 'chip--on' if not filter.formats }}" data-all>
+          <input type="checkbox" {{ 'checked' if not filter.formats }}>Любой
+        </label>
+        {% for fid, flabel in FORMATS %}
+        <label class="chip">
+          <input type="checkbox" name="format" value="{{ fid }}" {{ 'checked' if fid in filter.formats }}>{{ flabel }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="filters__group">
+      <h2>Округ</h2>
+      <div class="chips chips--wrap" data-group>
+        <label class="chip {{ 'chip--on' if not filter.districts }}" data-all>
+          <input type="checkbox" {{ 'checked' if not filter.districts }}>Все
+        </label>
+        {% for d in DISTRICTS %}
+        <label class="chip">
+          <input type="checkbox" name="district" value="{{ d }}" {{ 'checked' if d in filter.districts }}>{{ d }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="sticky-actions">
+      <button class="btn btn--primary" type="submit">Показать события</button>
+      <a class="btn btn--secondary" href="/filters">Сбросить</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

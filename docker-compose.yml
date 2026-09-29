@@ -1,0 +1,120 @@
+# Вариант для Timeweb Cloud App Platform (тип приложения Docker Compose).
+# Локально используется compose.yaml — docker compose берёт его первым,
+# когда рядом лежат оба файла.
+#
+# Чем этот файл отличается от compose.yaml и почему:
+#   web стоит первым        платформа проксирует основной домен только на
+#                           первый сервис в манифесте
+#   нет секции volumes      директива volumes на платформе запрещена
+#   нет ключа name          верхнеуровневый name платформа тоже не принимает
+#   нет YAML-якорей         окружение выписано у каждого сервиса целиком,
+#                           чтобы не зависеть от того, как платформа разбирает
+#                           манифест
+#   нет своей сети          сервисы остаются в сети платформы. Явный
+#                           driver: bridge на Timeweb ломает имя db
+#
+# ВАЖНО про данные. Без тома база живёт внутри контейнера и очищается при
+# каждой пересборке: люди, подписки и напоминания пропадут, начальные данные
+# загрузятся заново. Если нужно, чтобы данные переживали деплой, берите
+# управляемую PostgreSQL и вариант с Dockerfile — подробности в README,
+# раздел «Постоянный адрес мини-приложения».
+
+services:
+  # Страницы мини-приложения. Первый сервис — на него платформа заводит домен.
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["uvicorn", "app.web:app", "--host", "0.0.0.0", "--port", "8080", "--loop", "asyncio", "--proxy-headers", "--forwarded-allow-ips", "*"]
+    # Без ports платформа не проксирует домен: Caddy отвечает 200 с пустым
+    # телом, и мини-приложение в MAX — белый экран. Левый порт — хостовый,
+    # его и забирает прокси. 80 и 443 занимать нельзя.
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-aperio}:${POSTGRES_PASSWORD:-aperio}@db:5432/${POSTGRES_DB:-aperio}
+      MAX_BOT_TOKEN: ${MAX_BOT_TOKEN:-}
+      MAX_BOT_USERNAME: ${MAX_BOT_USERNAME:-}
+      MAX_API_BASE: ${MAX_API_BASE:-}
+      ADMIN_USER_IDS: ${ADMIN_USER_IDS:-}
+      ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}
+      INIT_DATA_TTL_SEC: ${INIT_DATA_TTL_SEC:-3600}
+      SESSION_TTL_SEC: ${SESSION_TTL_SEC:-86400}
+      ADMIN_SESSION_TTL_SEC: ${ADMIN_SESSION_TTL_SEC:-7200}
+      DEMO_DELAY_SEC: ${DEMO_DELAY_SEC:-60}
+      WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
+      SEED_ON_START: ${SEED_ON_START:-true}
+      TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aperio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aperio}
+      POSTGRES_DB: ${POSTGRES_DB:-aperio}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  # Чат-бот на maxo. Стартует после того, как web создал схему.
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "-m", "app.bot"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-aperio}:${POSTGRES_PASSWORD:-aperio}@db:5432/${POSTGRES_DB:-aperio}
+      MAX_BOT_TOKEN: ${MAX_BOT_TOKEN:-}
+      MAX_BOT_USERNAME: ${MAX_BOT_USERNAME:-}
+      MAX_API_BASE: ${MAX_API_BASE:-}
+      ADMIN_USER_IDS: ${ADMIN_USER_IDS:-}
+      ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}
+      INIT_DATA_TTL_SEC: ${INIT_DATA_TTL_SEC:-3600}
+      SESSION_TTL_SEC: ${SESSION_TTL_SEC:-86400}
+      ADMIN_SESSION_TTL_SEC: ${ADMIN_SESSION_TTL_SEC:-7200}
+      DEMO_DELAY_SEC: ${DEMO_DELAY_SEC:-60}
+      WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
+      SEED_ON_START: ${SEED_ON_START:-true}
+      TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Планировщик уведомлений.
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "-m", "app.worker"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-aperio}:${POSTGRES_PASSWORD:-aperio}@db:5432/${POSTGRES_DB:-aperio}
+      MAX_BOT_TOKEN: ${MAX_BOT_TOKEN:-}
+      MAX_BOT_USERNAME: ${MAX_BOT_USERNAME:-}
+      MAX_API_BASE: ${MAX_API_BASE:-}
+      ADMIN_USER_IDS: ${ADMIN_USER_IDS:-}
+      ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}
+      INIT_DATA_TTL_SEC: ${INIT_DATA_TTL_SEC:-3600}
+      SESSION_TTL_SEC: ${SESSION_TTL_SEC:-86400}
+      ADMIN_SESSION_TTL_SEC: ${ADMIN_SESSION_TTL_SEC:-7200}
+      DEMO_DELAY_SEC: ${DEMO_DELAY_SEC:-60}
+      WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
+      SEED_ON_START: ${SEED_ON_START:-true}
+      TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped

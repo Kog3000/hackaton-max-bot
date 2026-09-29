@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}Aperio | Бесплатные мероприятия{% endblock %}</title>
+  <link rel="preload" href="/static/fonts/Gilroy-Regular.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/static/fonts/Gilroy-Medium.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/static/fonts/Gilroy-Bold.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/static/css/app.css">
+  <script src="https://st.max.ru/js/max-web-app.js"></script>
+</head>
+<body>
+<div class="app">
+  {% block content %}{% endblock %}
+
+  {% if show_tabbar|default(true) %}
+  <nav class="tabbar" aria-label="Разделы">
+    <a class="{{ 'is-on' if tab == 'home' }}" href="/home"><span class="ic" style="--ic:url(/static/icons/boxicons_home-alt-2.svg)"></span>Главная</a>
+    <a class="{{ 'is-on' if tab == 'favorites' }}" href="/favorites"><span class="ic" style="--ic:url(/static/icons/akar-icons_heart.svg)"></span>Избранное</a>
+    <a class="{{ 'is-on' if tab == 'profile' }}" href="/profile"><span class="ic" style="--ic:url(/static/icons/iconamoon_profile.svg)"></span>Профиль</a>
+  </nav>
+  {% endif %}
+
+  {% if toast %}<div class="toast" role="status">{{ toast }}</div>{% endif %}
+</div>
+<script>
+// Токен сессии подставляется во все переходы: во встроенном окне MAX cookie может быть недоступна.
+(function () {
+  const url = new URL(location.href);
+  let token = url.searchParams.get('s');
+  try {
+    if (token) sessionStorage.setItem('aperio_session', token);
+    else token = sessionStorage.getItem('aperio_session');
+  } catch (e) {}
+  if (!token) return;
+  document.querySelectorAll('a[href^="/"]').forEach((a) => {
+    const next = new URL(a.getAttribute('href'), location.origin);
+    next.searchParams.set('s', token);
+    a.setAttribute('href', next.pathname + next.search);
+  });
+  document.querySelectorAll('form').forEach((form) => {
+    // у формы GET браузер отбрасывает строку запроса из action, поэтому токен кладём полем
+    if ((form.getAttribute('method') || 'get').toLowerCase() === 'get') {
+      let field = form.querySelector('input[name="s"]');
+      if (!field) {
+        field = document.createElement('input');
+        field.type = 'hidden';
+        field.name = 's';
+        form.appendChild(field);
+      }
+      field.value = token;
+      return;
+    }
+    const action = new URL(form.getAttribute('action') || location.pathname, location.origin);
+    action.searchParams.set('s', token);
+    form.setAttribute('action', action.pathname + action.search);
+  });
+})();
+</script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

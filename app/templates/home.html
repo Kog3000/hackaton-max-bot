@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% set tab = 'home' %}
+{% block content %}
+<main class="screen">
+  {% include "_topbar.html" %}
+
+  <form class="searchbar" method="get" action="/home">
+    <label class="search">
+      <span class="ic" style="--ic:url(/static/icons/search.svg)"></span>
+      <span class="visually-hidden">Поиск по событиям</span>
+      <input name="q" value="{{ query }}" placeholder="Поиск по категориям" inputmode="search">
+    </label>
+    <input type="hidden" name="topic" value="{{ topic }}">
+    <a class="icon-btn" href="/filters" aria-label="Фильтры"><span class="ic" style="--ic:url(/static/icons/mage_filter.svg)"></span></a>
+  </form>
+
+  <div class="chips">
+    <a class="chip {{ 'chip--on' if topic == 'all' }}" href="/home?topic=all{% if query %}&q={{ query }}{% endif %}">Все</a>
+    {% for tid, tlabel in TOPICS %}
+      <a class="chip {{ 'chip--on' if topic == tid }}" href="/home?topic={{ tid }}{% if query %}&q={{ query }}{% endif %}">{{ tlabel }}</a>
+    {% endfor %}
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Бесплатно по льготе</h2>
+      <a class="link-btn" href="/onboarding?mode=change">{{ category_label(user.category) }}</a>
+    </div>
+    {% if not benefits %}
+      <div class="state">
+        <p class="state__title">На две недели вперёд ничего нет</p>
+        <p class="state__text">Загляните в каталог — там есть события, открытые для всех.</p>
+        <a class="btn btn--secondary" href="/catalog">Открыть каталог</a>
+      </div>
+    {% else %}
+      <ul class="list">{% for item in benefits %}<li>{% include "_card.html" %}</li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+
+  {% if events %}
+  <section>
+    <div class="section-head"><h2>Все мероприятия</h2><span class="muted">{{ events|length }}</span></div>
+    <ul class="list">{% for item in events %}<li>{% include "_card.html" %}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  {% if empty and (query or topic != 'all') %}
+  <div class="state">
+    <p class="state__title">Ничего не нашли</p>
+    <p class="state__text">Попробуйте другой запрос или тему.</p>
+    <a class="btn btn--secondary" href="/home">Сбросить</a>
+  </div>
+  {% endif %}
+</main>
+{% endblock %}

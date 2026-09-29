@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% set show_tabbar = false %}
+{% block content %}
+<main class="screen" data-back="/admin?section=rules">
+  {% include "_topbar.html" %}
+  <div class="filters__head">
+    <a class="icon-btn icon-btn--plain" href="/admin?section=rules" aria-label="Назад"><span class="ic ic--back" style="--ic:url(/static/icons/arrow.svg)"></span></a>
+    <h1>{{ 'Льготный день' if item else 'Новый льготный день' }}</h1>
+  </div>
+  <p class="lead">Регулярный бесплатный день музея. Даты программа посчитает сама. «Музейная неделя» — день внутри третьей календарной недели месяца, как в городской акции.</p>
+
+  <form method="post" action="/admin/rule">
+    <input type="hidden" name="rule_id" value="{{ item.id if item else '' }}">
+
+    <section class="form-section">
+      <h2>Где</h2>
+      <div class="field"><label for="venue_id">Площадка</label>
+        <select id="venue_id" name="venue_id">
+          <option value="">Выберите площадку</option>
+          {% for v in venues %}<option value="{{ v.id }}" {{ 'selected' if item and item.venue_id == v.id }}>{{ v.name }} ({{ v.district }})</option>{% endfor %}
+        </select></div>
+      <div class="field-group">
+        <div class="field"><label for="venue_name">Или новая площадка</label><input id="venue_name" name="venue_name" maxlength="200"></div>
+        <div class="field"><label for="district">Округ новой площадки</label>
+          <select id="district" name="district">{% for d in DISTRICTS %}<option value="{{ d }}">{{ d }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="field"><label for="title">Название</label>
+        <input id="title" name="title" required maxlength="200" value="{{ item.title if item else '' }}" placeholder="Бесплатный день для студентов"></div>
+    </section>
+
+    <section class="form-section">
+      <h2>Когда</h2>
+      <div class="field-group">
+        <div class="field"><label for="nth">Какой по счёту</label>
+          <select id="nth" name="nth">
+            {% for value, name in NTH_OPTIONS %}
+            <option value="{{ value }}" {{ 'selected' if item and item.nth == value }}>{{ name }}</option>{% endfor %}
+          </select></div>
+        <div class="field"><label for="weekday">День недели</label>
+          <select id="weekday" name="weekday">
+            {% for d in [1,2,3,4,5,6,0] %}<option value="{{ d }}" {{ 'selected' if item and item.weekday == d }}>{{ WEEKDAYS[d] }}</option>{% endfor %}
+          </select></div>
+      </div>
+      {% if item %}<div class="rule-preview"><p class="rule-preview__main">{{ rule_text(item.weekday, item.nth) }}</p>
+        {% if item.next_date %}<p class="rule-preview__dates">Ближайшая дата: {{ item.next_date|day }}</p>{% endif %}</div>{% endif %}
+    </section>
+
+    <section class="form-section">
+      <h2>Кому</h2>
+      <div class="chips chips--wrap">
+        {% for cid, full, short, hint in CATEGORIES %}{% if cid != 'none' %}
+        <label class="chip {{ 'chip--on' if item and cid in item.categories }}">
+          <input type="checkbox" name="categories" value="{{ cid }}" class="visually-hidden" {{ 'checked' if item and cid in item.categories }}>{{ short }}
+        </label>
+        {% endif %}{% endfor %}
+      </div>
+      <div class="field" style="margin-top:14px"><label for="conditions">Условия</label>
+        <textarea id="conditions" name="conditions" rows="3" maxlength="1000">{{ item.conditions if item and item.conditions else '' }}</textarea></div>
+      <div class="field"><label for="documents">Взять с собой</label>
+        <textarea id="documents" name="documents" rows="2">{{ item.documents|join('\n') if item else '' }}</textarea>
+        <p class="field__hint">Каждый документ с новой строки</p></div>
+    </section>
+
+    <section class="form-section">
+      <h2>Источник</h2>
+      <div class="field"><label for="source_name">Источник</label>
+        <input id="source_name" name="source_name" required maxlength="300" value="{{ item.source_name if item else '' }}" placeholder="Сайт музея, раздел «Льготы»"></div>
+      <div class="field"><label for="source_url">Ссылка</label>
+        <input id="source_url" type="url" name="source_url" placeholder="https://" value="{{ item.source_url if item and item.source_url else '' }}"></div>
+      <div class="field"><label for="checked_at">Дата проверки</label>
+        <input id="checked_at" type="date" name="checked_at" value="{{ item.checked_at if item else '' }}"></div>
+    </section>
+
+    <div class="sticky-actions">
+      <button class="btn btn--primary" type="submit">{{ 'Сохранить изменения' if item else 'Добавить правило' }}</button>
+    </div>
+  </form>
+
+  {% if item %}
+  <form method="post" action="/admin/rule/{{ item.id }}/delete">
+    <button class="btn btn--danger" type="submit">Удалить правило</button>
+  </form>
+  {% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,23 @@
+{# Карточка события или льготного дня в списке #}
+<article class="card">
+  <a class="card__open" href="/item/{{ item.key }}">
+    <span class="card__tile">{% if item.cover_url %}<img src="{{ item.cover_url }}" alt="">{% endif %}</span>
+    <span class="card__body">
+      <span class="card__title">{{ item.venue if item.kind == 'benefit' else item.title }}</span>
+      <span class="card__sub">{{ item.title if item.kind == 'benefit' else [item.venue, item.district]|select|join(', ') }}</span>
+      {% if item.kind == 'registration' %}
+        {% set state = item|label %}
+        <span class="strip strip--{{ state[0] }}">
+          <span class="strip__track"><span class="strip__open" data-left="{{ item.strip_left }}" data-width="{{ item.strip_width }}"></span></span>
+          <span class="strip__label">{{ state[1] }}</span>
+        </span>
+      {% endif %}
+      <span class="card__foot">
+        {% if item.kind == 'benefit' %}<span class="tag tag--free">{{ item.date|rel }}</span>{% endif %}
+        {% if item.topic %}<span class="tag">{{ item.topic|topic }}</span>{% endif %}
+        {% if item.reminded %}<span class="tag tag--free">В избранном</span>{% endif %}
+      </span>
+    </span>
+    <span class="card__chevron ic ic--sm" style="--ic:url(/static/icons/arrow.svg)"></span>
+  </a>
+</article>
