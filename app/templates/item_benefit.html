@@ -51,6 +51,7 @@
       {% for d in item.documents %}<li><span class="ic ic--sm" style="--ic:url(/static/icons/charm_tick.svg)"></span>Взять с собой: {{ d }}</li>{% endfor %}
     </ul>
 
+    {% if item.is_model_data %}<p class="field__hint">⚠ Демонстрационные данные: условия не подтверждены автоматически. Перед использованием обязательно проверьте первичный источник.</p>{% endif %}
     <p class="source">
       Источник: {% if item.source_url %}<a href="{{ item.source_url }}" target="_blank" rel="noopener">{{ item.source_name }}</a>{% else %}{{ item.source_name }}{% endif %}<br>
       Дата проверки: {{ item.checked_at|checked }}<br>

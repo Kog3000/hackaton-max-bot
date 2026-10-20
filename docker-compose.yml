@@ -45,6 +45,8 @@ services:
       WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
       SEED_ON_START: ${SEED_ON_START:-true}
       TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+      PARTNER_FEED_URL: ${PARTNER_FEED_URL:-}
+      PARTNER_SYNC_INTERVAL_SEC: ${PARTNER_SYNC_INTERVAL_SEC:-300}
     depends_on:
       db:
         condition: service_healthy
@@ -89,6 +91,8 @@ services:
       WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
       SEED_ON_START: ${SEED_ON_START:-true}
       TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+      PARTNER_FEED_URL: ${PARTNER_FEED_URL:-}
+      PARTNER_SYNC_INTERVAL_SEC: ${PARTNER_SYNC_INTERVAL_SEC:-300}
     depends_on:
       web:
         condition: service_healthy
@@ -114,6 +118,8 @@ services:
       WORKER_INTERVAL_SEC: ${WORKER_INTERVAL_SEC:-15}
       SEED_ON_START: ${SEED_ON_START:-true}
       TZ_OFFSET_MIN: ${TZ_OFFSET_MIN:-180}
+      PARTNER_FEED_URL: ${PARTNER_FEED_URL:-}
+      PARTNER_SYNC_INTERVAL_SEC: ${PARTNER_SYNC_INTERVAL_SEC:-300}
     depends_on:
       web:
         condition: service_healthy

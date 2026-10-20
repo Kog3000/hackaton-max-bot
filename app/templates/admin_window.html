@@ -71,6 +71,14 @@
       <div class="field"><label for="image_url">Обложка</label><input id="image_url" name="image_url" placeholder="/static/img/… или https://" value="{{ item.cover_url if item and item.cover_url else '' }}"></div>
       <div class="field"><label for="source_name">Источник анонса</label><input id="source_name" name="source_name" required value="{{ item.source_name if item else '' }}" placeholder="mos.ru, новость Мостуризма"></div>
       <div class="field"><label for="source_url">Ссылка на анонс</label><input id="source_url" type="url" name="source_url" placeholder="https://" value="{{ item.source_url if item and item.source_url else '' }}"></div>
+      <div class="field"><label for="checked_at">Дата последней проверки</label>
+        <input id="checked_at" type="date" name="checked_at" value="{{ item.checked_at if item else '' }}">
+        <p class="field__hint">Укажите дату, когда условия были сверены с источником. Если оставить пустым, будет записана сегодняшняя дата.</p></div>
+      <label class="chip {{ 'chip--on' if item and item.is_model_data }}">
+        <input type="checkbox" name="is_model_data" value="1" class="visually-hidden" {{ 'checked' if item and item.is_model_data }}>
+        Демонстрационные / неподтверждённые данные
+      </label>
+      <p class="field__hint">Не отмечайте для записи, подтверждённой первичным источником. Отметка будет видна пользователям.</p>
     </section>
 
     <div class="sticky-actions">

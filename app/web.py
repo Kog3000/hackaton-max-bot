@@ -593,7 +593,7 @@ async def admin_window_save(
     format: str = Form("offline"), reg_opens_at: str = Form(...), reg_closes_at: str = Form(...), starts_at: str = Form(...),
     eligibility: list[str] = Form([]), conditions: str = Form(""), documents: str = Form(""),
     register_url: str = Form(""), image_url: str = Form(""), source_name: str = Form(...),
-    source_url: str = Form(""), is_model_data: str = Form(""), user: dict = Admin,
+    source_url: str = Form(""), checked_at: str = Form(""), is_model_data: str = Form(""), user: dict = Admin,
 ):
     data = {
         "title": title.strip(), "topic": topic, "district": district,
@@ -602,8 +602,12 @@ async def admin_window_save(
         "reg_opens_at": msk_input(reg_opens_at), "reg_closes_at": msk_input(reg_closes_at), "starts_at": msk_input(starts_at),
         "eligibility": eligibility or ["all"], "conditions": conditions.strip() or None, "documents": form_lines(documents),
         "register_url": register_url.strip() or None, "image_url": image_url.strip() or None,
-        "source_name": source_name.strip(), "source_url": source_url.strip() or None, "is_model_data": bool(is_model_data),
+        "source_name": source_name.strip(), "source_url": source_url.strip() or None,
+        "checked_at": date.fromisoformat(checked_at) if checked_at else None,
+        "is_model_data": bool(is_model_data),
     }
+    if not data["title"] or not data["source_name"]:
+        return back(f"/admin/window/{window_id}" if window_id else "/admin/window", "Укажите название и источник")
     if data["reg_opens_at"] >= data["reg_closes_at"]:
         return back(f"/admin/window/{window_id}" if window_id else "/admin/window", "Запись должна закрываться позже, чем открывается")
     saved_id = await services.save_window(data, int(window_id) if window_id.isdigit() else None)
@@ -637,6 +641,8 @@ async def admin_rule_save(
 ):
     if not categories:
         return back(f"/admin/rule/{rule_id}" if rule_id else "/admin/rule", "Выберите хотя бы одну категорию")
+    if not title.strip() or not source_name.strip():
+        return back(f"/admin/rule/{rule_id}" if rule_id else "/admin/rule", "Укажите название и источник")
     data = {
         "venue_id": venue_id, "venue_name": venue_name, "district": district, "title": title.strip(),
         "categories": categories, "weekday": weekday, "nth": nth, "conditions": conditions.strip() or None,

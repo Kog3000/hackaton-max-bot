@@ -54,3 +54,7 @@ DEMO_DELAY = _int("DEMO_DELAY_SEC", 60)
 WORKER_INTERVAL = _int("WORKER_INTERVAL_SEC", 15)
 SEED_ON_START = _bool("SEED_ON_START", True)
 TZ_OFFSET_MIN = _int("TZ_OFFSET_MIN", 180)
+
+# Необязательный JSON-фид партнёра. Пока URL пустой, внешняя синхронизация выключена.
+PARTNER_FEED_URL = _str("PARTNER_FEED_URL")
+PARTNER_SYNC_INTERVAL = max(60, _int("PARTNER_SYNC_INTERVAL_SEC", 300))

@@ -69,6 +69,11 @@
         <input id="source_url" type="url" name="source_url" placeholder="https://" value="{{ item.source_url if item and item.source_url else '' }}"></div>
       <div class="field"><label for="checked_at">Дата проверки</label>
         <input id="checked_at" type="date" name="checked_at" value="{{ item.checked_at if item else '' }}"></div>
+      <label class="chip {{ 'chip--on' if item and item.is_model_data }}">
+        <input type="checkbox" name="is_model_data" value="1" class="visually-hidden" {{ 'checked' if item and item.is_model_data }}>
+        Демонстрационные / неподтверждённые данные
+      </label>
+      <p class="field__hint">Отметка будет видна пользователям и поможет отличать тестовые записи от проверенных.</p>
     </section>
 
     <div class="sticky-actions">

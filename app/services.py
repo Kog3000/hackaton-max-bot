@@ -400,6 +400,8 @@ async def save_window(data: dict, window_id: int | None) -> int:
         "image_url": data["image_url"],
         "source_name": data["source_name"],
         "source_url": data["source_url"],
+        "checked_at": data.get("checked_at") or today_msk(),
+        "is_model_data": bool(data.get("is_model_data", False)),
         "format": data["format"],
     }, window_id)
 
@@ -416,6 +418,7 @@ async def save_rule(data: dict, rule_id: int | None) -> int:
         "source_name": data["source_name"],
         "source_url": data["source_url"],
         "checked_at": data["checked_at"] or today_msk(),
+        "is_model_data": bool(data.get("is_model_data", False)),
     }, rule_id)
 
 

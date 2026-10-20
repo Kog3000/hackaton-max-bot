@@ -47,13 +47,14 @@ async def seed_if_empty() -> bool:
 
     await db.run_many(
         """INSERT INTO windows (title, topic, district, venue_id, starts_at, reg_opens_at, reg_closes_at,
-                                eligibility, conditions, documents, register_url, source_name, source_url, format)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)""",
+                                eligibility, conditions, documents, register_url, source_name, source_url, format,
+                                is_model_data)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)""",
         [
             (w["title"], w["topic"], w["district"], venues[w["venue"]], _moment(w["starts"], start),
              _moment(w["reg_opens"], start), _moment(w["reg_closes"], start), w["eligibility"],
              w.get("conditions"), w.get("documents", []), w.get("register_url"), w["source_name"], w.get("source_url"),
-             w.get("format", "offline"))
+             w.get("format", "offline"), w.get("is_model_data", True))
             for w in DATA["windows"]
         ],
     )

@@ -5,7 +5,7 @@ from datetime import timedelta
 from aiohttp import ClientError
 from maxo import Bot
 
-from app import config, db, messages, services
+from app import config, db, messages, services, partner_feed
 from app.domain import MSK, now_utc, occurrences, today_msk, window_status
 
 
@@ -97,11 +97,21 @@ async def _loop() -> None:
     await db.connect()
     bot = messages.make_bot()
     print(f"[worker] сборка {config.BUILD}, интервал {config.WORKER_INTERVAL} с")
+    if config.PARTNER_FEED_URL:
+        print(f"[worker] включён JSON-фид партнёра; интервал синхронизации {config.PARTNER_SYNC_INTERVAL} с")
+    last_partner_sync = 0.0
     async with bot.context(auto_close=True):
         while True:
             sent = await run_once(bot)
             if sent:
                 print(f"[worker] отправлено сообщений: {sent}")
+            now = time.monotonic()
+            if config.PARTNER_FEED_URL and now - last_partner_sync >= config.PARTNER_SYNC_INTERVAL:
+                last_partner_sync = now
+                try:
+                    await partner_feed.sync()
+                except Exception as exc:
+                    print(f"[partner-feed] синхронизация не удалась: {type(exc).__name__}: {exc}")
             await asyncio.sleep(config.WORKER_INTERVAL)
 
 
