@@ -170,3 +170,31 @@ async def notify(user_id: int, message: dict) -> None:
             await send(bot, user_id, message)
     except Exception as exc:
         print(f"[web] уведомление для {user_id} не ушло: {exc}")
+
+
+def updates_message(rows: list[dict]) -> dict:
+    """Повторно показывает актуальную информацию прямо в диалоге с ботом."""
+    if not rows:
+        return {
+            "text": (
+                "📌 Актуальная информация Aperio\n\n"
+                "Сейчас нет предстоящих событий с доступной записью.\n"
+                "Вернуться к этой информации можно в любой момент командой /updates.\n\n"
+                "Полный список и льготные дни — в мини-приложении."
+            ),
+            "attachments": [keyboard([[open_app("Открыть Aperio")]])],
+        }
+    lines = ["📌 Актуальная информация Aperio", "Предстоящие события и запись:"]
+    for row in rows[:8]:
+        venue = f" — {row['venue']}" if row.get("venue") else ""
+        lines.append(f"\n• {row['title']}{venue}\n  Начало: {fmt_dt(row['starts_at'])}")
+        if row.get("reg_opens_at") and row.get("reg_closes_at"):
+            lines.append(f"  Запись: {fmt_dt(row['reg_opens_at'])} — {fmt_dt(row['reg_closes_at'])}")
+        if row.get("register_url"):
+            lines.append(f"  Запись: {row['register_url']}")
+    lines.extend(["", "Сохраните этот диалог и возвращайтесь к информации командой /updates.",
+                  "Полный список событий и льготных дней — в мини-приложении."])
+    return {
+        "text": "\n".join(lines),
+        "attachments": [keyboard([[open_app("Открыть Aperio")]])],
+    }
