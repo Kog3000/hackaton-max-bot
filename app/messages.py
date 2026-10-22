@@ -51,9 +51,30 @@ def welcome(first_name: str | None) -> dict:
 def help_message() -> dict:
     return {
         "text": ("Команды:\n/start — открыть приложение\n/demo — тестовое уведомление через минуту\n"
+                 "/updates — мои мероприятия, на которые я записался\n"
                  "/admin — задать вопрос администратору\n/help — эта подсказка"),
         "attachments": [keyboard([[open_app("Открыть Aperio")]])],
     }
+
+
+def updates_message(items: list[dict]) -> dict:
+    """Показывает только мероприятия, сохранённые пользователем в его списке записи."""
+    if not items:
+        return {
+            "text": "У вас пока нет мероприятий в списке записи. Откройте Aperio и нажмите на сердечко у интересующего мероприятия, чтобы сохранить его здесь.\n\nКоманда /updates всегда покажет ваш список.",
+            "attachments": [keyboard([[open_app("Найти мероприятия")]])],
+        }
+
+    lines = ["**Ваши мероприятия**", "Вот мероприятия, которые вы сохранили в своём списке:"]
+    for item in items:
+        venue = f"\nМесто: {item['venue']}" if item.get("venue") else ""
+        address = f"\nАдрес: {item['address']}" if item.get("address") else ""
+        lines.append(f"\n**{item['title']}**\nКогда: {fmt_dt(item['starts_at'])}{venue}{address}")
+        if item.get("register_url"):
+            lines.append(f"Запись: {item['register_url']}")
+        lines.append(f"Источник: {item.get('source_name') or 'не указан'} · проверено: {item.get('checked_at') or 'дата не указана'}")
+    lines.append("\nЧтобы проверить список позже, снова отправьте /updates.")
+    return {"text": "\n".join(lines), "format": TextFormat.MARKDOWN}
 
 
 def ask_admin() -> dict:
@@ -170,31 +191,3 @@ async def notify(user_id: int, message: dict) -> None:
             await send(bot, user_id, message)
     except Exception as exc:
         print(f"[web] уведомление для {user_id} не ушло: {exc}")
-
-
-def updates_message(rows: list[dict]) -> dict:
-    """Повторно показывает актуальную информацию прямо в диалоге с ботом."""
-    if not rows:
-        return {
-            "text": (
-                "📌 Актуальная информация Aperio\n\n"
-                "Сейчас нет предстоящих событий с доступной записью.\n"
-                "Вернуться к этой информации можно в любой момент командой /updates.\n\n"
-                "Полный список и льготные дни — в мини-приложении."
-            ),
-            "attachments": [keyboard([[open_app("Открыть Aperio")]])],
-        }
-    lines = ["📌 Актуальная информация Aperio", "Предстоящие события и запись:"]
-    for row in rows[:8]:
-        venue = f" — {row['venue']}" if row.get("venue") else ""
-        lines.append(f"\n• {row['title']}{venue}\n  Начало: {fmt_dt(row['starts_at'])}")
-        if row.get("reg_opens_at") and row.get("reg_closes_at"):
-            lines.append(f"  Запись: {fmt_dt(row['reg_opens_at'])} — {fmt_dt(row['reg_closes_at'])}")
-        if row.get("register_url"):
-            lines.append(f"  Запись: {row['register_url']}")
-    lines.extend(["", "Сохраните этот диалог и возвращайтесь к информации командой /updates.",
-                  "Полный список событий и льготных дней — в мини-приложении."])
-    return {
-        "text": "\n".join(lines),
-        "attachments": [keyboard([[open_app("Открыть Aperio")]])],
-    }

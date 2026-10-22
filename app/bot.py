@@ -91,18 +91,12 @@ async def on_message(event: MessageCreated, bot: Bot) -> None:
         await _start(bot, user_id, first_name)
     elif text.startswith("/demo"):
         await _demo(bot, user_id, first_name)
-    elif text.startswith("/updates"):
+    elif text.split(maxsplit=1)[0].split("@", 1)[0] == "/updates":
         await services.upsert_user(user_id, first_name)
-        from datetime import timedelta
-        from app.domain import now_utc
-        moment = now_utc()
-        rows = await db.rows(
-            services.WINDOWS + "WHERE w.starts_at > $1 AND w.reg_closes_at > $1 "
-            "AND (w.demo_for IS NULL OR w.demo_for = $2) "
-            "ORDER BY w.starts_at LIMIT 8",
-            moment, user_id,
-        )
-        await messages.send(bot, user_id, messages.updates_message([dict(row) for row in rows]))
+        # reminders — именно личный список сохранённых пользователем мероприятий;
+        # общий каталог сюда не попадает.
+        items = await services.list_reminders(user_id)
+        await messages.send(bot, user_id, messages.updates_message(items))
     elif text.startswith("/admin"):
         await services.upsert_user(user_id, first_name)
         await services.set_asking(user_id, True)
@@ -147,7 +141,7 @@ async def _run() -> None:
                     commands=[
                         BotCommand(name="start", description="Открыть приложение"),
                         BotCommand(name="demo", description="Тестовое уведомление через минуту"),
-                        BotCommand(name="updates", description="Актуальная информация в чате"),
+                        BotCommand(name="updates", description="Мои сохранённые мероприятия"),
                         BotCommand(name="admin", description="Задать вопрос администратору"),
                         BotCommand(name="reply", description="Ответить пользователю: /reply ID текст"),
                         BotCommand(name="help", description="Подсказка"),
